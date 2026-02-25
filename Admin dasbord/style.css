@@ -97,6 +97,8 @@ body {
 }
 
 .profile-btn {
+    display: inline-block;
+    text-decoration: none;
     background: linear-gradient(135deg, var(--accent), var(--accent-strong));
     color: #ffffff;
     border: none;
@@ -332,5 +334,63 @@ tr:nth-child(even) {
         flex-direction: column;
         gap: 10px;
         width: calc(100% - 32px);
+    }
+}
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.profile-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+}
+
+.profile-avatar {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+    font-weight: 800;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.profile-card h2 {
+    margin-bottom: 6px;
+}
+
+.profile-card p {
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.profile-badge {
+    display: inline-block;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: #0369a1;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.profile-form {
+    max-width: 100%;
+}
+
+@media (max-width: 900px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
     }
 }

@@ -12,13 +12,14 @@
     <a href="events.php">Manage Events</a>
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
+    <a href="profile.php">Profile</a>
     <a href="sign_in.php">Logout</a>
 </div>
 
 <div class="main">
     <div class="topbar">
         <h3>Dashboard</h3>
-        <button class="profile-btn">Admin</button>
+        <a class="profile-btn" href="profile.php">Admin Profile</a>
     </div>
 
     <div class="page-content">
@@ -40,3 +41,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
