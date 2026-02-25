@@ -3,62 +3,8 @@
 <head>
     <title>Add Movie</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="add-movie.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .movie-page-bg {
-            background:
-                radial-gradient(circle at 10% 10%, rgba(14, 165, 233, 0.12) 0, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(2, 132, 199, 0.1) 0, transparent 40%),
-                linear-gradient(165deg, #f7f9ff, #dfe9ff);
-        }
-
-        .movie-form-card {
-            border: 1px solid #d6e0f5;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
-        }
-
-        .movie-form-card .section-title {
-            color: #0369a1;
-            letter-spacing: 0.2px;
-            margin-bottom: 18px;
-        }
-
-        .movie-form {
-            max-width: 980px;
-            border: 1px solid #d6e0f5;
-            box-shadow: 0 8px 22px rgba(2, 132, 199, 0.1);
-            background: linear-gradient(180deg, #ffffff, #f7faff);
-            padding: 24px;
-            border-radius: 14px;
-        }
-
-        .movie-form .form-grid {
-            gap: 18px;
-        }
-
-        .movie-form .form-group label {
-            color: #0f172a;
-            font-weight: 700;
-            margin-bottom: 7px;
-        }
-
-        @media (max-width: 768px) {
-            .movie-form-card {
-                border-radius: 12px;
-                padding: 18px;
-            }
-
-            .movie-form {
-                padding: 16px;
-            }
-
-            .movie-form-card .section-title {
-                font-size: 22px;
-            }
-        }
-    </style>
 </head>
 <body class="movie-page-bg">
 <div class="sidebar" id="sidebar">

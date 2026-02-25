@@ -129,7 +129,7 @@
 
         <div class="card searchable-card" data-search="lagan laagii re gujarati movie drama">
             <div class="poster">
-                <img src="https://via.placeholder.com/300x450?text=Lagan+Laagii+Re" alt="Lagan Laagii Re">
+                <img src="lagan-laagii-re.jpg" alt="Lagan Laagii Re">
             </div>
             <div class="info">
                 <h3>Lagan Laagii Re</h3>
@@ -140,7 +140,7 @@
 
         <div class="card searchable-card" data-search="bhabiji ghar par hain hindi comedy movie">
             <div class="poster">
-                <img src="https://via.placeholder.com/300x450?text=Bhabiji+Ghar+Par+Hain" alt="Bhabiji Ghar Par Hain">
+                <img src="bhabiji-ghar-par-hain.jpg" alt="Bhabiji Ghar Par Hain">
             </div>
             <div class="info">
                 <h3>Bhabiji Ghar Par Hain!</h3>
@@ -151,7 +151,7 @@
 
         <div class="card searchable-card" data-search="pass na pass gujarati movie">
             <div class="poster">
-                <img src="https://via.placeholder.com/300x450?text=Pass+Na+Pass" alt="Pass Na Pass">
+                <img src="pass na pass.jpg" alt="Pass Na Pass">
             </div>
             <div class="info">
                 <h3>Pass Na Pass</h3>

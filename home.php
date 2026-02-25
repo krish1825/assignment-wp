@@ -113,6 +113,15 @@
             color: #111827;
         }
 
+        .event-card .card-photo {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--line);
+        }
+
         .event-card p {
             margin-bottom: 10px;
             color: var(--muted);
@@ -249,6 +258,7 @@
         <h2>Trending Now</h2>
         <div class="cards">
             <div class="event-card searchable-card" data-search="kung fu panda movie hindi">
+                <img class="card-photo" src="m74S9tsrUQUYB8Raou21B6zjbcr.jpg" alt="Kung Fu Panda Poster">
                 <h3>Kung Fu Panda</h3>
                 <p>Movie | From INR 499</p>
                 <a href="movies.php">Book movie</a>

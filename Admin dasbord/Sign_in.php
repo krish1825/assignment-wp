@@ -29,25 +29,16 @@
         <div class="divider">OR</div>
 
         <div class="social-login">
-            <button class="google" onclick="googleLogin()">Sign in with Google</button>
-            <button class="facebook" onclick="facebookLogin()">Sign in with Facebook</button>
-
+            <button class="google">Sign in with Google</button>
+            <button class="facebook">Sign in with Facebook</button>
         </div>
-        <script>
-            function googleLogin() {
-            window.location.href = "https://accounts.google.com/AccountChooser";
-            }
-            function facebookLogin() {
-            window.open("https://www.facebook.com/login", "_blank");
-        }
-        </script>
-
 
         <p class="signup-link">
-            Don’t have an account? <a href="sign_up.php">Sign Up</a>
+            Don't have an account? <a href="sign_up.php">Sign Up</a>
         </p>
     </div>
 </div>
 
+<script src="signin.js"></script>
 </body>
 </html>
