@@ -1,31 +1,33 @@
 * {
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
     margin: 0;
     height: 100vh;
-    background: linear-gradient(to right, #7c3aed, #f97316);
+    background: linear-gradient(165deg, #f7f9ff, #dfe9ff);
+    background-attachment: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #0f172a;
 }
 
-/* Container */
 .login-container {
     width: 100%;
     display: flex;
     justify-content: center;
+    padding: 20px;
 }
 
-/* Login Box */
 .login-box {
     background: #ffffff;
     padding: 35px;
     width: 360px;
     border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: 1px solid #d6e0f5;
+    box-shadow: 0 20px 35px rgba(15, 23, 42, 0.12);
     text-align: center;
 }
 
@@ -34,21 +36,25 @@ body {
 }
 
 .login-box p {
-    color: #6b7280;
+    color: #475569;
     margin-bottom: 25px;
 }
 
-/* Inputs */
 .login-box input {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
     border-radius: 6px;
-    border: 1px solid #d1d5db;
+    border: 1px solid #bfd8ff;
     font-size: 14px;
 }
 
-/* Options */
+.login-box input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.16);
+}
+
 .options {
     display: flex;
     justify-content: space-between;
@@ -58,15 +64,14 @@ body {
 
 .options a {
     text-decoration: none;
-    color: #7c3aed;
+    color: #0284c7;
 }
 
-/* Button */
 .login-box button[type="submit"] {
     width: 100%;
     padding: 12px;
-    background: #7c3aed;
-    color: white;
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: #ffffff;
     border: none;
     border-radius: 6px;
     font-size: 15px;
@@ -74,17 +79,15 @@ body {
 }
 
 .login-box button:hover {
-    background: #6d28d9;
+    filter: brightness(0.95);
 }
 
-/* Divider */
 .divider {
     margin: 20px 0;
     font-size: 14px;
     color: #9ca3af;
 }
 
-/* Social Login */
 .social-login button {
     width: 100%;
     padding: 10px;
@@ -97,21 +100,20 @@ body {
 
 .google {
     background: #ea4335;
-    color: white;
+    color: #ffffff;
 }
 
 .facebook {
     background: #1877f2;
-    color: white;
+    color: #ffffff;
 }
 
-/* Signup */
 .signup-link {
     margin-top: 15px;
     font-size: 14px;
 }
 
 .signup-link a {
-    color: #7c3aed;
+    color: #0284c7;
     text-decoration: none;
 }

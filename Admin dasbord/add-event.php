@@ -7,29 +7,29 @@
     <style>
         .event-page-bg {
             background:
-                radial-gradient(circle at 0% 20%, #ffe6d5 0, transparent 42%),
-                radial-gradient(circle at 100% 90%, #e5e7ff 0, transparent 38%),
-                linear-gradient(135deg, #f9fafb, #eef2ff);
+                radial-gradient(circle at 0% 20%, rgba(14, 165, 233, 0.12) 0, transparent 42%),
+                radial-gradient(circle at 100% 90%, rgba(2, 132, 199, 0.1) 0, transparent 38%),
+                linear-gradient(165deg, #f7f9ff, #dfe9ff);
         }
 
         .event-form-card {
-            border: 1px solid #e5e7eb;
+            border: 1px solid #d6e0f5;
             background: #ffffff;
             border-radius: 16px;
-            box-shadow: 0 16px 36px rgba(31, 41, 55, 0.08);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
         }
 
         .event-form-card .section-title {
-            color: #c2410c;
-            letter-spacing: 0.3px;
+            color: #0369a1;
+            letter-spacing: 0.2px;
             margin-bottom: 18px;
         }
 
         .event-form {
             max-width: 980px;
-            border: 1px solid #f2e3da;
-            box-shadow: 0 8px 22px rgba(194, 65, 12, 0.08);
-            background: linear-gradient(180deg, #ffffff, #fffbf8);
+            border: 1px solid #d6e0f5;
+            box-shadow: 0 8px 22px rgba(2, 132, 199, 0.1);
+            background: linear-gradient(180deg, #ffffff, #f7faff);
             padding: 24px;
             border-radius: 14px;
         }
@@ -39,41 +39,9 @@
         }
 
         .event-form .form-group label {
-            color: #9a3412;
+            color: #0f172a;
             font-weight: 700;
             margin-bottom: 7px;
-        }
-
-        .event-form .form-group input,
-        .event-form .form-group select,
-        .event-form .form-group textarea {
-            background: #fff8f3;
-            border: 1px solid #f3d8c8;
-            border-radius: 10px;
-            padding: 11px 12px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-
-        .event-form .form-group textarea {
-            min-height: 130px;
-            line-height: 1.45;
-        }
-
-        .event-form .submit-btn {
-            background: linear-gradient(135deg, #ea580c, #fb923c);
-            box-shadow: 0 10px 22px rgba(234, 88, 12, 0.28);
-            border-radius: 10px;
-            padding: 12px 22px;
-            letter-spacing: 0.2px;
-        }
-
-        .event-form input:focus,
-        .event-form select:focus,
-        .event-form textarea:focus {
-            outline: none;
-            border-color: #ea580c;
-            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.16);
-            background: #fff;
         }
 
         @media (max-width: 768px) {

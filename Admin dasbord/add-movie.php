@@ -7,29 +7,29 @@
     <style>
         .movie-page-bg {
             background:
-                radial-gradient(circle at 10% 10%, #e0e7ff 0, transparent 45%),
-                radial-gradient(circle at 90% 90%, #ffe9d6 0, transparent 40%),
-                linear-gradient(135deg, #f3f4f6, #eef2ff);
+                radial-gradient(circle at 10% 10%, rgba(14, 165, 233, 0.12) 0, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(2, 132, 199, 0.1) 0, transparent 40%),
+                linear-gradient(165deg, #f7f9ff, #dfe9ff);
         }
 
         .movie-form-card {
-            border: 1px solid #e5e7eb;
+            border: 1px solid #d6e0f5;
             background: #ffffff;
             border-radius: 16px;
-            box-shadow: 0 16px 36px rgba(31, 41, 55, 0.08);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
         }
 
         .movie-form-card .section-title {
-            color: #4338ca;
-            letter-spacing: 0.3px;
+            color: #0369a1;
+            letter-spacing: 0.2px;
             margin-bottom: 18px;
         }
 
         .movie-form {
             max-width: 980px;
-            border: 1px solid #e7ebf5;
-            box-shadow: 0 8px 22px rgba(79, 70, 229, 0.08);
-            background: linear-gradient(180deg, #ffffff, #fbfcff);
+            border: 1px solid #d6e0f5;
+            box-shadow: 0 8px 22px rgba(2, 132, 199, 0.1);
+            background: linear-gradient(180deg, #ffffff, #f7faff);
             padding: 24px;
             border-radius: 14px;
         }
@@ -39,41 +39,9 @@
         }
 
         .movie-form .form-group label {
-            color: #312e81;
+            color: #0f172a;
             font-weight: 700;
             margin-bottom: 7px;
-        }
-
-        .movie-form .form-group input,
-        .movie-form .form-group select,
-        .movie-form .form-group textarea {
-            background: #f8faff;
-            border: 1px solid #dbe2f0;
-            border-radius: 10px;
-            padding: 11px 12px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-
-        .movie-form .form-group textarea {
-            min-height: 130px;
-            line-height: 1.45;
-        }
-
-        .movie-form .submit-btn {
-            background: linear-gradient(135deg, #4338ca, #6366f1);
-            box-shadow: 0 10px 22px rgba(67, 56, 202, 0.3);
-            border-radius: 10px;
-            padding: 12px 22px;
-            letter-spacing: 0.2px;
-        }
-
-        .movie-form input:focus,
-        .movie-form select:focus,
-        .movie-form textarea:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
-            background: #fff;
         }
 
         @media (max-width: 768px) {
