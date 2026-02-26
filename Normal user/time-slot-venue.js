@@ -98,7 +98,7 @@
 
     continueBtn.addEventListener("click", function () {
         if (continueBtn.disabled) return;
-        var url = "seat-booking.php?show=" + encodeURIComponent(selectedShow) +
+        var url = "#" + encodeURIComponent(selectedShow) +
             "&date=" + encodeURIComponent(showDate.value) +
             "&time=" + encodeURIComponent(selectedTime) +
             "&venue=" + encodeURIComponent(selectedVenue) +
