@@ -130,3 +130,18 @@ body {
     text-decoration: none;
 }
 
+.error-box {
+    display: none;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.field-error {
+    border-color: #dc2626 !important;
+}
+

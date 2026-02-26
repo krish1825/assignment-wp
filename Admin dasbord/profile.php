@@ -29,7 +29,7 @@
                 <div class="profile-card">
                     <div class="profile-avatar">A</div>
                     <h2>Admin</h2>
-                    <p>Administrator Account</p>
+                    <p>Krish Limbasiya</p>
                     <span class="profile-badge">Active</span>
                 </div>
 
@@ -38,11 +38,11 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="admin_name">Full Name</label>
-                            <input type="text" id="admin_name" name="admin_name" value="Admin" required>
+                            <input type="text" id="admin_name" name="admin_name" value="Krish Limbasiy  " required>
                         </div>
                         <div class="form-group">
                             <label for="admin_email">Email</label>
-                            <input type="email" id="admin_email" name="admin_email" value="admin@ticketverse.com" required>
+                            <input type="email" id="admin_email" name="admin_email" value="krish@ticketverse.com" required>
                         </div>
                         <div class="form-group">
                             <label for="admin_phone">Phone</label>

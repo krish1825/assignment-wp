@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(165deg, #f7f9ff, #dfe9ff);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #0f172a;
+}
+
+.auth-main {
+    min-height: calc(100vh - 78px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+}
+
+.login-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login Box */
+.login-box {
+    background: #ffffff;
+    padding: 35px;
+    width: 360px;
+    border-radius: 12px;
+    border: 1px solid #d6e0f5;
+    box-shadow: 0 20px 35px rgba(15, 23, 42, 0.12);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 10px;
+}
+
+.login-box p {
+    color: #475569;
+    margin-bottom: 25px;
+}
+
+/* Inputs */
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #bfd8ff;
+    font-size: 14px;
+}
+
+.login-box input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.16);
+}
+
+/* Options */
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.options a {
+    text-decoration: none;
+    color: #0284c7;
+}
+
+/* Button */
+.login-box button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    filter: brightness(0.95);
+}
+
+/* Divider */
+.divider {
+    margin: 20px 0;
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+/* Social Login */
+.social-login button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.google {
+    background: #ea4335;
+    color: white;
+}
+
+.facebook {
+    background: #1877f2;
+    color: white;
+}
+
+/* Signup */
+.signup-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.signup-link a {
+    color: #0284c7;
+    text-decoration: none;
+}
+
+.error-box {
+    display: none;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.field-error {
+    border-color: #dc2626 !important;
+}
+

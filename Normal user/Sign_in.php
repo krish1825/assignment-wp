@@ -6,22 +6,6 @@
     <title>Sign In | Ticketvarse</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="signin.css">
-    <style>
-        .error-box {
-            display: none;
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-            padding: 10px 12px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            text-align: left;
-        }
-
-        .field-error {
-            border-color: #dc2626 !important;
-        }
-    </style>
 </head>
 <body>
 
@@ -102,46 +86,7 @@
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script>
-function googleLogin() {
-    window.location.href = "https://accounts.google.com/AccountChooser";
-}
-
-function facebookLogin() {
-    window.open("https://www.facebook.com/login", "_blank");
-}
-
-$(function () {
-    var $form = $("#loginForm");
-    var $errorBox = $("#loginErrors");
-
-    $form.on("submit", function (e) {
-        var errors = [];
-
-        $form.find("input").removeClass("field-error");
-        $errorBox.hide().empty();
-
-        var email = $.trim($form.find("[name='email']").val());
-        var password = $form.find("[name='password']").val();
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!email || !emailRegex.test(email)) {
-            errors.push("Enter a valid Email address.");
-            $form.find("[name='email']").addClass("field-error");
-        }
-
-        if (!password) {
-            errors.push("Password is required.");
-            $form.find("[name='password']").addClass("field-error");
-        }
-
-        if (errors.length) {
-            e.preventDefault();
-            $errorBox.html(errors.join("<br>")).show();
-        }
-    });
-});
-</script>
+<script src="sign-in.js"></script>
 
 </body>
 </html>

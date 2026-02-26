@@ -5,117 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookings | Ticketvarse</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .bookings-page {
-            padding: 30px 40px 50px;
-        }
-
-        .bookings-page h1 {
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-
-        .bookings-page p {
-            margin-bottom: 24px;
-            color: var(--muted);
-        }
-
-        .bookings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 18px;
-        }
-
-        .booking-card {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            padding: 16px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .booking-type {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--accent-strong);
-            background: var(--accent-soft);
-            padding: 4px 10px;
-            border-radius: 999px;
-            margin-bottom: 10px;
-        }
-
-        .booking-card h3 {
-            color: #111827;
-            margin-bottom: 10px;
-        }
-
-        .booking-meta {
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .status {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .status.confirmed {
-            color: #065f46;
-            background: #d1fae5;
-        }
-
-        .status.upcoming {
-            color: var(--accent-strong);
-            background: var(--accent-soft);
-        }
-
-        .actions {
-            margin-top: 14px;
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            flex: 1;
-            border: none;
-            border-radius: 6px;
-            padding: 9px;
-            cursor: pointer;
-            color: #fff;
-        }
-
-        .view-btn {
-            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-        }
-
-        .download-btn {
-            background: var(--success);
-        }
-
-        .view-btn:hover {
-            filter: brightness(0.95);
-        }
-
-        .download-btn:hover {
-            filter: brightness(0.95);
-        }
-
-        .no-results {
-            margin-top: 16px;
-            background: var(--warning-bg);
-            border: 1px solid var(--warning-line);
-            color: var(--warning-text);
-            border-radius: 8px;
-            padding: 12px;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="my-bookings.css">
 </head>
 <body>
 
@@ -126,6 +16,7 @@
         <a href="movies.php">Movies</a>
         <a href="events.php">Events</a>
         <a href="Offers.php">Offers</a>
+        <a href="profile.php">Profile</a>
         <a href="My_Bookings.php">My Bookings</a>
         </nav>
 </header>
@@ -198,6 +89,7 @@
         </div>
         <div class="footer-col">
             <h4>Support</h4>
+            <a href="profile.php">Profile</a>
             <a href="My_Bookings.php">My Bookings</a>
             <a href="Sign_in.php">Sign In</a>
             <a href="sign_up.php">Sign Up</a>
@@ -214,4 +106,5 @@
 <script src="search.js"></script>
 </body>
 </html>
+
 

@@ -5,64 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events | Ticketvarse</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .events-page {
-            padding: 30px 40px 50px;
-        }
-
-        .events-page h1 {
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-
-        .events-page p {
-            margin-bottom: 24px;
-            color: var(--muted);
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
-        }
-
-        .events-page .event-card {
-            width: 100%;
-            border: 1px solid var(--line);
-        }
-
-        .event-meta {
-            margin: 10px 0;
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .book-btn {
-            margin-top: 10px;
-            width: 100%;
-            border: none;
-            border-radius: 6px;
-            padding: 10px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .book-btn:hover {
-            filter: brightness(0.95);
-        }
-
-        .no-results {
-            margin-top: 16px;
-            background: var(--warning-bg);
-            border: 1px solid var(--warning-line);
-            color: var(--warning-text);
-            border-radius: 8px;
-            padding: 12px;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="events.css">
 </head>
 <body>
 
@@ -73,6 +16,7 @@
         <a href="movies.php">Movies</a>
         <a href="events.php">Events</a>
         <a href="Offers.php">Offers</a>
+        <a href="profile.php">Profile</a>
         <a href="My_Bookings.php">My Bookings</a>
         </nav>
 </header>
@@ -85,37 +29,37 @@
         <div class="event-card searchable-card" data-search="arijit singh live concert mumbai dy patil music">
             <h3>Arijit Singh Live</h3>
             <div class="event-meta">16 Mar 2026<br>DY Patil Stadium, Mumbai<br>From INR 1999</div>
-            <button class="book-btn">Book Tickets</button>
+            <button class="book-btn" onclick="window.location.href='time-slot-venue.php?show=Arijit%20Singh%20Live%20Concert&date=2026-03-16&city=Mumbai'">Book Tickets</button>
         </div>
 
         <div class="event-card searchable-card" data-search="zakir khan stand-up comedy pune bal gandharva">
             <h3>Zakir Khan Stand-up</h3>
             <div class="event-meta">22 Mar 2026<br>Bal Gandharva, Pune<br>From INR 899</div>
-            <button class="book-btn">Book Tickets</button>
+            <button class="book-btn" onclick="window.location.href='time-slot-venue.php?show=Zakir%20Khan%20Stand-up%20Special&date=2026-03-22&city=Pune'">Book Tickets</button>
         </div>
 
         <div class="event-card searchable-card" data-search="sunburn arena delhi jln stadium dj">
             <h3>Sunburn Arena</h3>
             <div class="event-meta">29 Mar 2026<br>JLN Stadium, Delhi<br>From INR 1499</div>
-            <button class="book-btn">Book Tickets</button>
+            <button class="book-btn" onclick="window.location.href='time-slot-venue.php?show=Sunburn%20Arena%20Delhi&date=2026-03-29&city=Delhi'">Book Tickets</button>
         </div>
 
         <div class="event-card searchable-card" data-search="food music fest ahmedabad festival">
             <h3>Food &amp; Music Fest</h3>
             <div class="event-meta">5 Apr 2026<br>Riverfront Ground, Ahmedabad<br>From INR 499</div>
-            <button class="book-btn">Book Tickets</button>
+            <button class="book-btn" onclick="window.location.href='time-slot-venue.php?show=Food%20and%20Music%20Fest&date=2026-04-05&city=Ahmedabad'">Book Tickets</button>
         </div>
 
         <div class="event-card searchable-card" data-search="startup networking night gandhinagar gift city">
             <h3>Startup Networking Night</h3>
             <div class="event-meta">11 Apr 2026<br>GIFT City Club, Gandhinagar<br>From INR 699</div>
-            <button class="book-btn">Book Tickets</button>
+            <button class="book-btn" onclick="window.location.href='time-slot-venue.php?show=Startup%20Networking%20Night&date=2026-04-11&city=Ahmedabad'">Book Tickets</button>
         </div>
 
         <div class="event-card searchable-card" data-search="classical evening ncpa mumbai music">
             <h3>Classical Evening</h3>
             <div class="event-meta">18 Apr 2026<br>NCPA, Mumbai<br>From INR 799</div>
-            <button class="book-btn">Book Tickets</button>
+            <button class="book-btn" onclick="window.location.href='time-slot-venue.php?show=Classical%20Evening%20NCPA&date=2026-04-18&city=Mumbai'">Book Tickets</button>
         </div>
     </div>
 
@@ -137,6 +81,7 @@
         </div>
         <div class="footer-col">
             <h4>Support</h4>
+            <a href="profile.php">Profile</a>
             <a href="My_Bookings.php">My Bookings</a>
             <a href="Sign_in.php">Sign In</a>
             <a href="sign_up.php">Sign Up</a>
@@ -153,4 +98,5 @@
 <script src="search.js"></script>
 </body>
 </html>
+
 

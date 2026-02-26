@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(165deg, #f7f9ff, #dfe9ff);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #0f172a;
+}
+
+.btn {
+    background: #facc15;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 15px;
+}
+
+.form-container {
+    background: white;
+    width: 100%;
+    max-width: 700px;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #d6e0f5;
+    box-shadow: 0 20px 35px rgba(15, 23, 42, 0.12);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0f172a;
+}
+
+fieldset {
+    border: 1px solid #d6e0f5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+legend {
+    padding: 0 10px;
+    font-weight: bold;
+    color: #0284c7;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #bfd8ff;
+    font-size: 14px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.16);
+}
+
+.inline {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.inline label {
+    font-weight: normal;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.actions button {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: white;
+}
+
+.reset-btn {
+    background: #e2e8f0;
+}
+
+.submit-btn:hover {
+    filter: brightness(0.95);
+}
+
+.reset-btn:hover {
+    background: #cbd5e1;
+}
+
+.error-box {
+    display: none;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+}
+
+.field-error {
+    border-color: #dc2626 !important;
+}
