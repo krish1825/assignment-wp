@@ -55,11 +55,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="full_name">Full Name</label>
-                        <input id="full_name" type="text" value="Arjun Mehta">
+                        <input id="full_name" type="text" value="Alok Limbasiya">
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input id="email" type="email" value="arjun@ticketvarse.com">
+                        <input id="email" type="email" value="alok@ticketvarse.com">
                     </div>
                 </div>
                 <div class="form-row">
@@ -69,7 +69,7 @@
                     </div>
                     <div class="form-group">
                         <label for="city">City</label>
-                        <input id="city" type="text" value="Ahmedabad">
+                        <input id="city" type="text" value="Rajkot">
                     </div>
                 </div>
                 <div class="form-row">
