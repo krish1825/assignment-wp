@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticketvarse | Book Tickets</title>
+    <title>Ticketvarse | Book Tickets | Guest User</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="home-search.css">
@@ -69,16 +69,19 @@
                 <a href="movies.php">Book movie</a>
             </div>
             <div class="event-card searchable-card" data-search="arijit singh live concert mumbai event">
+                <img class="card-photo" src="arijit-singh.jpg" alt="Arijit Singh Live Poster">
                 <h3>Arijit Singh Live</h3>
                 <p>Concert | From INR 1999</p>
                 <a href="events.php">Book event</a>
             </div>
             <div class="event-card searchable-card" data-search="zakir khan stand-up comedy event">
+                <img class="card-photo" src="zakhir-khan.jpg" alt="Zakir Khan Stand-up Poster">
                 <h3>Zakir Khan Stand-up</h3>
                 <p>Comedy | From INR 899</p>
                 <a href="events.php">Book event</a>
             </div>
             <div class="event-card searchable-card" data-search="weekend combo offer deals discount">
+                <img class="card-photo" src="weekend-combo-offer.jpg" alt="Weekend Combo Offer Poster">
                 <h3>Weekend Combo Offer</h3>
                 <p>Deals | Save up to 20%</p>
                 <a href="Offers.php">See offer</a>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticketvarse | Book Tickets</title>
+    <title>Ticketvarse | Book Tickets | Normal User</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="home-search.css">
