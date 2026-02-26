@@ -8,7 +8,7 @@
 <body>
 <div class="sidebar" id="sidebar">
     <div class="logo">🎟 TicketVerse</div>
-    <a href="index.php">Dashboard</a>
+    <a href="index.php" class="active">Dashboard</a>
     <a href="events.php">Manage Events</a>
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
@@ -18,6 +18,7 @@
 
 <div class="main">
     <div class="topbar">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
         <h3>Dashboard</h3>
         <a class="profile-btn" href="profile.php">Admin Profile</a>
     </div>
