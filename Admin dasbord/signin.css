@@ -11,7 +11,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #0f172a;
+    color: #fd0404;
 }
 
 .login-container {
@@ -53,6 +53,23 @@ body {
     outline: none;
     border-color: #0ea5e9;
     box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.16);
+}
+
+.login-box .error-message {
+    display: block;
+    margin-top: -8px;
+    margin-bottom: 10px;
+    text-align: left;
+    color: #ff0000 !important;
+    font-size: 12px;
+    min-height: 16px;
+    font-weight: 600;
+}
+
+.login-box input.has-error {
+    border-color: #ff0000;
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
+    background: #fff5f5;
 }
 
 .options {
