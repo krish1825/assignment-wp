@@ -1,3 +1,32 @@
+<?php
+session_start();
+
+require_once __DIR__ . '/../includes/content_repository.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'normal') {
+    header('Location: Sign_in.php?error=Please%20sign%20in%20as%20normal%20user');
+    exit;
+}
+
+$user = find_user_for_login((string) ($_SESSION['user_id'] ?? ''));
+if (!$user || ($user['status'] ?? 'active') !== 'active') {
+    session_unset();
+    session_destroy();
+    header('Location: Sign_in.php?error=Your%20account%20is%20inactive');
+    exit;
+}
+
+$movies = fetch_movies();
+$languages = [];
+$genres = [];
+$today = date('Y-m-d');
+foreach ($movies as $movie) {
+    $languages[] = trim((string) $movie['language']);
+    $genres[] = trim((string) $movie['genre']);
+}
+$languages = array_values(array_unique(array_filter($languages)));
+$genres = array_values(array_unique(array_filter($genres)));
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +37,6 @@
     <link rel="stylesheet" href="movies.css">
 </head>
 <body>
-
 <header class="navbar">
     <div class="logo">Ticketvarse</div>
     <nav>
@@ -18,70 +46,38 @@
         <a href="Offers.php">Offers</a>
         <a href="profile.php">Profile</a>
         <a href="My_Bookings.php">My Bookings</a>
-        </nav>
+    </nav>
 </header>
-
 <div class="movies-shell">
     <section class="hero">
         <h1>Now Showing</h1>
-        <p>Handpicked movies, updated regularly.</p>
+        <p>Browse <?= count($movies) ?> active movies from the Ticketvarse database.</p>
         <div class="filter-bar">
-            <div class="filter">Hindi</div>
-            <div class="filter">Gujarati</div>
-            <div class="filter">UA</div>
-            <div class="filter">Coming Soon</div>
+            <?php foreach ($languages as $language): ?>
+                <div class="filter"><?= e($language) ?></div>
+            <?php endforeach; ?>
+            <?php foreach ($genres as $genre): ?>
+                <div class="filter"><?= e(ucfirst($genre)) ?></div>
+            <?php endforeach; ?>
         </div>
     </section>
-
     <section class="movies-grid">
-        <div class="card searchable-card" data-search="kung fu panda movie hindi ua16 family animation">
-            <div class="poster">
-                <img src="m74S9tsrUQUYB8Raou21B6zjbcr.jpg" alt="Kung Fu Panda">
+        <?php foreach ($movies as $movie): ?>
+            <?php $bookingDate = ((string) $movie['release_date'] >= $today) ? (string) $movie['release_date'] : $today; ?>
+            <div class="card searchable-card" data-search="<?= e(strtolower($movie['title'] . ' ' . $movie['genre'] . ' ' . $movie['language'])) ?>">
+                <div class="poster">
+                    <img src="<?= e(guest_media_path($movie['image_path'], default_movie_image())) ?>" alt="<?= e($movie['title']) ?>">
+                </div>
+                <div class="info">
+                    <h3><?= e($movie['title']) ?></h3>
+                    <span><?= e(ucfirst((string) $movie['genre'])) ?> | <?= e($movie['language']) ?> | INR <?= number_format((float) $movie['ticket_price'], 0) ?></span>
+                    <button class="book" onclick="window.location.href='time-slot-venue.php?show=<?= rawurlencode((string) $movie['title']) ?>&date=<?= e($bookingDate) ?>&city=Ahmedabad'">Book Tickets</button>
+                </div>
             </div>
-            <div class="info">
-                <h3>Kung Fu Panda</h3>
-                <span>8.9 | UA16+ | Hindi</span>
-                <button class="book" onclick="window.location.href='time-slot-venue.php?show=Kung%20Fu%20Panda%20(Hindi%202D)&date=2026-03-16&city=Ahmedabad'">Book Tickets</button>
-            </div>
-        </div>
-
-        <div class="card searchable-card" data-search="lagan laagii re gujarati movie drama">
-            <div class="poster">
-                <img src="lagan-laagii-re.jpg" alt="Lagan Laagii Re">
-            </div>
-            <div class="info">
-                <h3>Lagan Laagii Re</h3>
-                <span>9.1 | UA13+ | Gujarati</span>
-                <button class="book" onclick="window.location.href='time-slot-venue.php?show=Lagan%20Laagii%20Re%20(Gujarati)&date=2026-03-17&city=Ahmedabad'">Book Tickets</button>
-            </div>
-        </div>
-
-        <div class="card searchable-card" data-search="bhabiji ghar par hain hindi comedy movie">
-            <div class="poster">
-                <img src="bhabiji-ghar-par-hain.jpg" alt="Bhabiji Ghar Par Hain">
-            </div>
-            <div class="info">
-                <h3>Bhabiji Ghar Par Hain!</h3>
-                <span>9.0 | UA16+ | Hindi</span>
-                <button class="book" onclick="window.location.href='time-slot-venue.php?show=Bhabiji%20Ghar%20Par%20Hain!%20(Hindi)&date=2026-03-18&city=Mumbai'">Book Tickets</button>
-            </div>
-        </div>
-
-        <div class="card searchable-card" data-search="pass na pass gujarati movie">
-            <div class="poster">
-                <img src="pass na pass.jpg" alt="Pass Na Pass">
-            </div>
-            <div class="info">
-                <h3>Pass Na Pass</h3>
-                <span>7.1 | UA | Gujarati</span>
-                <button class="book" onclick="window.location.href='time-slot-venue.php?show=Pass%20Na%20Pass%20(Gujarati)&date=2026-03-19&city=Pune'">Book Tickets</button>
-            </div>
-        </div>
+        <?php endforeach; ?>
     </section>
-
     <div id="no-results" class="no-results"></div>
 </div>
-
 <footer class="site-footer">
     <div class="footer-grid">
         <div class="footer-col">
@@ -99,7 +95,6 @@
             <h4>Support</h4>
             <a href="profile.php">Profile</a>
             <a href="My_Bookings.php">My Bookings</a>
-            <a href="Sign_in.php">Sign In</a>
             <a href="sign_up.php">Sign Up</a>
         </div>
         <div class="footer-col">
@@ -110,9 +105,6 @@
     </div>
     <div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div>
 </footer>
-
 <script src="search.js"></script>
 </body>
 </html>
-
-

@@ -10,7 +10,7 @@
 <body>
     <div class="sidebar" id="sidebar">
         <div class="logo">TicketVerse</div>
-        <a href="index.php">Dashboard</a>
+        <a href="index1.php">Dashboard</a>
         <a href="events.php">Manage Events</a>
         <a href="bookings.php">Bookings</a>
         <a href="users.php">Users</a>

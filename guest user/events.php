@@ -1,3 +1,11 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../includes/content_repository.php';
+
+$events = fetch_events();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,49 +25,26 @@
         <a href="events.php">Events</a>
         <a href="Offers.php">Offers</a>
         <a href="sign_in.php">My Bookings</a>
-        </nav>
+    </nav>
 </header>
 
 <section class="events-page">
     <h1>Upcoming Events</h1>
-    <p>Discover concerts, comedy shows, workshops, and festivals happening near you.</p>
+    <p>Discover <?= count($events) ?> concerts, comedy shows, festivals, and experiences happening near you.</p>
 
     <div class="events-grid">
-        <div class="event-card searchable-card" data-search="arijit singh live concert mumbai dy patil music">
-            <h3>Arijit Singh Live</h3>
-            <div class="event-meta">16 Mar 2026<br>DY Patil Stadium, Mumbai<br>From INR 1999</div>
-            <button class="book-btn" onclick="window.location.href='sign_in.php'">Book Tickets</button>
-        </div>
-
-        <div class="event-card searchable-card" data-search="zakir khan stand-up comedy pune bal gandharva">
-            <h3>Zakir Khan Stand-up</h3>
-            <div class="event-meta">22 Mar 2026<br>Bal Gandharva, Pune<br>From INR 899</div>
-            <button class="book-btn" onclick="window.location.href='sign_in.php'">Book Tickets</button>
-        </div>
-
-        <div class="event-card searchable-card" data-search="sunburn arena delhi jln stadium dj">
-            <h3>Sunburn Arena</h3>
-            <div class="event-meta">29 Mar 2026<br>JLN Stadium, Delhi<br>From INR 1499</div>
-            <button class="book-btn" onclick="window.location.href='sign_in.php'">Book Tickets</button>
-        </div>
-
-        <div class="event-card searchable-card" data-search="food music fest ahmedabad festival">
-            <h3>Food &amp; Music Fest</h3>
-            <div class="event-meta">5 Apr 2026<br>Riverfront Ground, Ahmedabad<br>From INR 499</div>
-            <button class="book-btn" onclick="window.location.href='sign_in.php'">Book Tickets</button>
-        </div>
-
-        <div class="event-card searchable-card" data-search="startup networking night gandhinagar gift city">
-            <h3>Startup Networking Night</h3>
-            <div class="event-meta">11 Apr 2026<br>GIFT City Club, Gandhinagar<br>From INR 699</div>
-            <button class="book-btn" onclick="window.location.href='sign_in.php'">Book Tickets</button>
-        </div>
-
-        <div class="event-card searchable-card" data-search="classical evening ncpa mumbai music">
-            <h3>Classical Evening</h3>
-            <div class="event-meta">18 Apr 2026<br>NCPA, Mumbai<br>From INR 799</div>
-            <button class="book-btn" onclick="window.location.href='sign_in.php'">Book Tickets</button>
-        </div>
+        <?php foreach ($events as $event): ?>
+            <div class="event-card searchable-card" data-search="<?= e(strtolower($event['name'] . ' ' . $event['category'] . ' ' . $event['location'])) ?>">
+                <h3><?= e($event['name']) ?></h3>
+                <div class="event-meta">
+                    <?= e(date('d M Y', strtotime((string) $event['event_date']))) ?><br>
+                    <?= e(date('h:i A', strtotime((string) $event['event_time']))) ?><br>
+                    <?= e($event['location']) ?><br>
+                    From INR <?= number_format((float) $event['ticket_price'], 0) ?>
+                </div>
+                <button class="book-btn" onclick="window.location.href='sign_in.php'">Book Tickets</button>
+            </div>
+        <?php endforeach; ?>
     </div>
 
     <div id="no-results" class="no-results"></div>
@@ -80,7 +65,7 @@
         </div>
         <div class="footer-col">
             <h4>Support</h4>
-            <a href="My_Bookings.php">My Bookings</a>
+            <a href="sign_in.php">My Bookings</a>
             <a href="Sign_in.php">Sign In</a>
             <a href="sign_up.php">Sign Up</a>
         </div>
@@ -96,4 +81,3 @@
 <script src="search.js"></script>
 </body>
 </html>
-

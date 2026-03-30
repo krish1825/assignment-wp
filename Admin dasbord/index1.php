@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: Sign_in.php?error=Please%20sign%20in%20as%20admin');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,12 +16,12 @@
 <body>
 <div class="sidebar" id="sidebar">
     <div class="logo">🎟 TicketVerse</div>
-    <a href="index.php">Dashboard</a>
+    <a href="index1.php">Dashboard</a>
     <a href="events.php">Manage Events</a>
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="sign_in.php">Logout</a>
+    <a href="../logout.php">Logout</a>
 </div>
 
 <div class="main">

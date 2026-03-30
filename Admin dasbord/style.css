@@ -293,6 +293,72 @@ tr:nth-child(even) {
     background: #f8fbff;
 }
 
+.notice {
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.success-notice {
+    color: #166534;
+    background: #ecfdf5;
+    border: 1px solid #86efac;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.section-space {
+    margin-top: 28px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-badge.active {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-badge.inactive {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.status-form {
+    margin: 0;
+}
+
+.status-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.activate-btn {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.deactivate-btn {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.status-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background: #94a3b8;
+}
+
 @media (max-width: 900px) {
     .form-grid {
         grid-template-columns: 1fr;
@@ -393,4 +459,152 @@ tr:nth-child(even) {
     .profile-layout {
         grid-template-columns: 1fr;
     }
+}
+
+.inline-action-form {
+    display: inline-flex;
+    align-items: center;
+}
+
+.movie-detail-row td {
+    background: #f8fbff;
+    padding-top: 0;
+}
+
+.manage-panel {
+    margin: 6px 0 8px;
+    border: 1px solid #d6e0f5;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #f7fbff);
+    padding: 18px;
+}
+
+.manage-panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.manage-panel-header h4 {
+    margin-bottom: 4px;
+}
+
+.manage-panel-header p,
+.manage-hint,
+.empty-inline-state,
+.schedule-admin-chip p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.panel-stat {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: #0369a1;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.schedule-chip-list {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.schedule-admin-chip {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    border: 1px solid #dbe7fb;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.manage-form {
+    border-top: 1px solid #e5eefc;
+    padding-top: 16px;
+}
+
+.manage-form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 14px;
+}
+
+.manage-custom-grid {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 14px;
+    align-items: end;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.city-venue-btn {
+    width: 100%;
+}
+
+.manage-form-footer {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+.mini-danger-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 12px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+    .manage-form-grid,
+    .manage-custom-grid {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .manage-panel-header,
+    .schedule-admin-chip,
+    .manage-form-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .manage-form-grid,
+    .manage-custom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.add-venue-btn {
+    background: linear-gradient(135deg, #0f766e, #115e59);
+}
+
+.add-venue-btn::before {
+    content: "+";
+    margin-right: 8px;
+    font-weight: 700;
+    display: inline-block;
+    width: 14px;
+    text-align: center;
 }

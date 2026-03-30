@@ -127,13 +127,36 @@
 
 .time-btn {
     border: 1px solid #cbd5e1;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #fff;
     color: #0f172a;
     font-weight: 700;
     padding: 10px 8px;
     cursor: pointer;
     transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+}
+
+.time-btn span {
+    font-size: 14px;
+}
+
+.time-btn small,
+.time-btn em {
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.time-btn small {
+    color: #0369a1;
+}
+
+.time-btn em {
+    color: #64748b;
 }
 
 .time-btn:hover {

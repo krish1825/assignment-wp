@@ -1,3 +1,23 @@
+<?php
+session_start();
+
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] === 'admin') {
+        header('Location: index1.php');
+        exit;
+    }
+
+    if ($_SESSION['role'] === 'guest') {
+        header('Location: ../guest%20user/home.php');
+        exit;
+    }
+
+    if ($_SESSION['role'] === 'normal') {
+        header('Location: ../Normal%20user/home.php');
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +32,15 @@
         <h2>Sign In</h2>
         <p>Welcome back! Please login to your account</p>
 
-        <form action="index.php" method="post">
-            <input type="email" placeholder="Email Address" required>
-            <input type="password" placeholder="Password" required>
+        <form id="loginForm" action="../login.php" method="post" novalidate>
+            <div id="loginErrors" class="error-box"<?php if (!isset($_GET['error'])): ?> style="display:none;"<?php endif; ?>>
+                <?php if (isset($_GET['error'])): ?>
+                    <?php echo htmlspecialchars($_GET['error']); ?>
+                <?php endif; ?>
+            </div>
+            <input type="text" name="user_id" placeholder="User ID" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="hidden" name="origin" value="admin">
 
             <div class="options">
                 <label>

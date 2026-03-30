@@ -1,6 +1,67 @@
+<?php
+session_start();
+
+require_once __DIR__ . '/../includes/content_repository.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'normal') {
+    header('Location: Sign_in.php?error=Please%20sign%20in%20as%20normal%20user');
+    exit;
+}
+
+$user = find_user_for_login((string) ($_SESSION['user_id'] ?? ''));
+if (!$user || ($user['status'] ?? 'active') !== 'active') {
+    session_unset();
+    session_destroy();
+    header('Location: Sign_in.php?error=Your%20account%20is%20inactive');
+    exit;
+}
+
+$show = trim((string) ($_GET['show'] ?? 'Kung Fu Panda'));
+$requestedDate = trim((string) ($_GET['date'] ?? ''));
+$requestedCity = trim((string) ($_GET['city'] ?? 'Ahmedabad'));
+$today = date('Y-m-d');
+$bookingDate = $requestedDate !== '' && $requestedDate >= $today ? $requestedDate : $today;
+$rawSchedules = fetch_movie_schedules_by_title($show);
+$groupedVenues = [];
+
+foreach ($rawSchedules as $schedule) {
+    $city = trim((string) ($schedule['city'] ?? 'Ahmedabad'));
+    $venue = trim((string) ($schedule['venue'] ?? ''));
+    $screenType = trim((string) ($schedule['screen_type'] ?? 'Standard'));
+    $showTime = trim((string) ($schedule['show_time'] ?? ''));
+
+    if ($venue === '' || $showTime === '') {
+        continue;
+    }
+
+    $details = catalog_venue_details($city, $venue);
+    if (!isset($groupedVenues[$city][$venue])) {
+        $groupedVenues[$city][$venue] = [
+            'city' => $city,
+            'venue' => $venue,
+            'area' => (string) ($details['area'] ?? $city),
+            'features' => array_values(array_unique(array_filter((array) ($details['features'] ?? [])))),
+            'screen_types' => [],
+            'shows' => [],
+        ];
+    }
+
+    if (!in_array($screenType, $groupedVenues[$city][$venue]['screen_types'], true)) {
+        $groupedVenues[$city][$venue]['screen_types'][] = $screenType;
+    }
+
+    $groupedVenues[$city][$venue]['shows'][] = [
+        'time' => $showTime,
+        'screen_type' => $screenType,
+        'show_label' => movie_show_label_for_time($showTime),
+    ];
+}
+
+$cityList = array_keys($groupedVenues);
+$city = in_array($requestedCity, $cityList, true) ? $requestedCity : ($cityList[0] ?? 'Ahmedabad');
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,174 +69,116 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="time-slot-venue.css">
 </head>
-
 <body>
+<header class="navbar">
+    <div class="logo">Ticketvarse</div>
+    <nav>
+        <a href="home.php">Home</a>
+        <a href="movies.php">Movies</a>
+        <a href="events.php">Events</a>
+        <a href="Offers.php">Offers</a>
+        <a href="profile.php">Profile</a>
+        <a href="My_Bookings.php">My Bookings</a>
+    </nav>
+</header>
 
-    <header class="navbar">
-        <div class="logo">Ticketvarse</div>
-        <nav>
-            <a href="home.php">Home</a>
-            <a href="movies.php">Movies</a>
-            <a href="events.php">Events</a>
-            <a href="Offers.php">Offers</a>
-            <a href="profile.php">Profile</a>
-            <a href="My_Bookings.php">My Bookings</a>
-        </nav>
-    </header>
-
-    <main class="slot-page">
+<main class="slot-page">
+    <form id="slotForm" action="seat-booking.php" method="get">
+        <input type="hidden" name="show" id="selectedShowInput" value="<?= e($show) ?>">
+        <input type="hidden" name="venue" id="selectedVenueInput" value="">
+        <input type="hidden" name="time" id="selectedTimeInput" value="">
+        <input type="hidden" name="city" id="selectedCityInput" value="<?= e($city) ?>">
         <section class="slot-hero">
             <div>
                 <h1>Choose Venue and Time</h1>
-                <p>Find the most convenient location and preferred show timing in one step.</p>
-                <span class="show-chip" id="selectedShowLabel">Now booking: Kung Fu Panda (Hindi 2D)</span>
+                <p>Browse more cities, richer venue choices, and venue-specific screen formats for every show.</p>
+                <span class="show-chip" id="selectedShowLabel">Now booking: <?= e($show) ?></span>
             </div>
             <div class="date-picker">
                 <label for="showDate">Date</label>
-                <input type="date" id="showDate">
+                <input type="date" id="showDate" name="date" value="<?= e($bookingDate) ?>" min="<?= e($today) ?>">
             </div>
         </section>
 
         <section class="city-switch" id="citySwitch">
-            <button class="city-pill active" data-city="Ahmedabad">Ahmedabad</button>
-            <button class="city-pill" data-city="Mumbai">Mumbai</button>
-            <button class="city-pill" data-city="Pune">Pune</button>
-            <button class="city-pill" data-city="Delhi">Delhi</button>
+            <?php foreach ($cityList as $cityName): ?>
+                <button type="button" class="city-pill<?= $city === $cityName ? ' active' : '' ?>" data-city="<?= e($cityName) ?>"><?= e($cityName) ?></button>
+            <?php endforeach; ?>
         </section>
 
         <section class="venues-grid" id="venueGrid">
-            <article class="venue-card" data-city="Ahmedabad">
-                <div class="venue-head">
-                    <h3>Cinepolis: Alpha One</h3>
-                    <p>Vastrapur, Ahmedabad</p>
-                </div>
-                <div class="venue-meta">
-                    <span>4K + Dolby</span>
-                    <span>Food Court</span>
-                    <span>Parking</span>
-                </div>
-                <div class="times">
-                    <button class="time-btn" data-time="10:15 AM">10:15 AM</button>
-                    <button class="time-btn" data-time="01:35 PM">01:35 PM</button>
-                    <button class="time-btn" data-time="04:45 PM">04:45 PM</button>
-                    <button class="time-btn" data-time="07:30 PM">07:30 PM</button>
-                </div>
-            </article>
-
-            <article class="venue-card" data-city="Ahmedabad">
-                <div class="venue-head">
-                    <h3>PVR: Acropolis Mall</h3>
-                    <p>Thaltej, Ahmedabad</p>
-                </div>
-                <div class="venue-meta">
-                    <span>Laser</span>
-                    <span>Recliner</span>
-                    <span>Parking</span>
-                </div>
-                <div class="times">
-                    <button class="time-btn" data-time="11:00 AM">11:00 AM</button>
-                    <button class="time-btn" data-time="02:20 PM">02:20 PM</button>
-                    <button class="time-btn" data-time="06:00 PM">06:00 PM</button>
-                    <button class="time-btn" data-time="09:40 PM">09:40 PM</button>
-                </div>
-            </article>
-
-            <article class="venue-card" data-city="Mumbai">
-                <div class="venue-head">
-                    <h3>INOX: R-City</h3>
-                    <p>Ghatkopar, Mumbai</p>
-                </div>
-                <div class="venue-meta">
-                    <span>Dolby Atmos</span>
-                    <span>Premium Seats</span>
-                    <span>Parking</span>
-                </div>
-                <div class="times">
-                    <button class="time-btn" data-time="10:30 AM">10:30 AM</button>
-                    <button class="time-btn" data-time="01:50 PM">01:50 PM</button>
-                    <button class="time-btn" data-time="05:20 PM">05:20 PM</button>
-                    <button class="time-btn" data-time="08:45 PM">08:45 PM</button>
-                </div>
-            </article>
-
-            <article class="venue-card" data-city="Pune">
-                <div class="venue-head">
-                    <h3>PVR: Phoenix Marketcity</h3>
-                    <p>Viman Nagar, Pune</p>
-                </div>
-                <div class="venue-meta">
-                    <span>IMAX</span>
-                    <span>Food Court</span>
-                    <span>Valet</span>
-                </div>
-                <div class="times">
-                    <button class="time-btn" data-time="09:50 AM">09:50 AM</button>
-                    <button class="time-btn" data-time="01:10 PM">01:10 PM</button>
-                    <button class="time-btn" data-time="04:20 PM">04:20 PM</button>
-                    <button class="time-btn" data-time="07:55 PM">07:55 PM</button>
-                </div>
-            </article>
-
-            <article class="venue-card" data-city="Delhi">
-                <div class="venue-head">
-                    <h3>Cinepolis: DLF Avenue</h3>
-                    <p>Saket, Delhi</p>
-                </div>
-                <div class="venue-meta">
-                    <span>4K Laser</span>
-                    <span>Lounge</span>
-                    <span>Parking</span>
-                </div>
-                <div class="times">
-                    <button class="time-btn" data-time="10:40 AM">10:40 AM</button>
-                    <button class="time-btn" data-time="02:00 PM">02:00 PM</button>
-                    <button class="time-btn" data-time="05:30 PM">05:30 PM</button>
-                    <button class="time-btn" data-time="09:10 PM">09:10 PM</button>
-                </div>
-            </article>
+            <?php foreach ($groupedVenues as $cityName => $venues): ?>
+                <?php foreach ($venues as $venueData): ?>
+                    <article class="venue-card" data-city="<?= e($cityName) ?>" data-venue="<?= e($venueData['venue']) ?>">
+                        <div class="venue-head">
+                            <h3><?= e($venueData['venue']) ?></h3>
+                            <p><?= e($venueData['area']) ?></p>
+                        </div>
+                        <div class="venue-meta">
+                            <?php foreach ($venueData['screen_types'] as $screenType): ?>
+                                <span><?= e($screenType) ?></span>
+                            <?php endforeach; ?>
+                            <?php foreach ($venueData['features'] as $feature): ?>
+                                <span><?= e($feature) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="times">
+                            <?php foreach ($venueData['shows'] as $showData): ?>
+                                <button type="button" class="time-btn" data-time="<?= e($showData['time']) ?>" data-screen="<?= e($showData['screen_type']) ?>" data-show-label="<?= e($showData['show_label']) ?>">
+                                    <span><?= e($showData['time']) ?></span>
+                                    <small><?= e($showData['screen_type']) ?></small>
+                                    <em><?= e($showData['show_label']) ?></em>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
         </section>
 
         <aside class="selection-bar">
             <div class="selection-meta">
-                <strong id="summaryShow">Kung Fu Panda (Hindi 2D)</strong>
+                <strong id="summaryShow"><?= e($show) ?></strong>
+                <span id="summaryCity">City: <?= e($city) ?></span>
                 <span id="summaryVenue">Venue: Not selected</span>
+                <span id="summaryScreen">Screen: Not selected</span>
                 <span id="summaryTime">Time: Not selected</span>
-                <span id="summaryDate">Date: Not selected</span>
+                <span id="summaryDate">Date: <?= e($bookingDate) ?></span>
             </div>
-            <button id="continueBtn" class="continue-btn" >Continue To Seat Selection</button>
+            <button id="continueBtn" type="submit" class="continue-btn" disabled>Continue To Seat Selection</button>
         </aside>
-    </main>
+    </form>
+</main>
 
-    <footer class="site-footer">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>Ticketvarse</h4>
-                <p>Book movie and event tickets with easy checkout and best prices.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <a href="home.php">Home</a>
-                <a href="movies.php">Movies</a>
-                <a href="events.php">Events</a>
-                <a href="Offers.php">Offers</a>
-            </div>
-            <div class="footer-col">
-                <h4>Support</h4>
-                <a href="profile.php">Profile</a>
-                <a href="My_Bookings.php">My Bookings</a>
-                <a href="Sign_in.php">Sign In</a>
-                <a href="sign_up.php">Sign Up</a>
-            </div>
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <p>Email: support@ticketvarse.com</p>
-                <p>Phone: +91 90000 00000</p>
-            </div>
+<footer class="site-footer">
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Ticketvarse</h4>
+            <p>Book movie and event tickets with easy checkout and best prices.</p>
         </div>
-        <div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div>
-    </footer>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <a href="home.php">Home</a>
+            <a href="movies.php">Movies</a>
+            <a href="events.php">Events</a>
+            <a href="Offers.php">Offers</a>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <a href="profile.php">Profile</a>
+            <a href="My_Bookings.php">My Bookings</a>
+            <a href="Sign_in.php">Sign In</a>
+            <a href="sign_up.php">Sign Up</a>
+        </div>
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <p>Email: support@ticketvarse.com</p>
+            <p>Phone: +91 90000 00000</p>
+        </div>
+    </div>
+    <div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div>
+</footer>
 
-    <script src="time-slot-venue.js"></script>
+<script src="time-slot-venue.js"></script>
 </body>
-
 </html>

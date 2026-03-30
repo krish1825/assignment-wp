@@ -37,6 +37,161 @@
     margin-bottom: 7px;
 }
 
+.schedule-builder {
+    border: 1px solid #cfe2ff;
+    border-radius: 14px;
+    padding: 18px;
+    background: linear-gradient(180deg, #f8fbff, #eef6ff);
+}
+
+.schedule-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.schedule-title {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.schedule-help,
+.schedule-note,
+.venue-preview,
+.empty-schedule,
+.timing-empty,
+.schedule-item p {
+    color: #475569;
+    font-size: 14px;
+}
+
+.schedule-count {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.schedule-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.custom-venue-builder {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.city-venue-btn {
+    width: 100%;
+}
+
+.timing-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.timing-chip {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 138px;
+    border: 1px solid #bfd8ff;
+    border-radius: 12px;
+    padding: 10px 12px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.timing-chip input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.timing-chip span {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.timing-chip small {
+    color: #0369a1;
+    font-weight: 600;
+}
+
+.timing-chip:has(input:checked) {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.16);
+    background: #f0f9ff;
+}
+
+.venue-preview {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px dashed #bfd8ff;
+}
+
+.schedule-actions {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.secondary-btn {
+    background: linear-gradient(135deg, #0369a1, #0c4a6e);
+}
+
+.schedule-list {
+    margin-top: 18px;
+    display: grid;
+    gap: 10px;
+}
+
+.schedule-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    border: 1px solid #d6e0f5;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: #ffffff;
+}
+
+.remove-schedule-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 12px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    font-weight: 700;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     .movie-form-card {
         border-radius: 12px;
@@ -50,5 +205,18 @@
     .movie-form-card .section-title {
         font-size: 22px;
     }
-}
 
+    .schedule-heading,
+    .schedule-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .schedule-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-venue-builder {
+        grid-template-columns: 1fr;
+    }
+}

@@ -16,13 +16,12 @@ $(function () {
         $form.find("input").removeClass("field-error");
         $errorBox.hide().empty();
 
-        var email = $.trim($form.find("[name='email']").val());
+        var userId = $.trim($form.find("[name='user_id']").val());
         var password = $form.find("[name='password']").val();
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!email || !emailRegex.test(email)) {
-            errors.push("Enter a valid Email address.");
-            $form.find("[name='email']").addClass("field-error");
+        if (!userId) {
+            errors.push("User ID is required.");
+            $form.find("[name='user_id']").addClass("field-error");
         }
 
         if (!password) {

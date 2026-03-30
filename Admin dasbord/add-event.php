@@ -1,3 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../includes/content_repository.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $imagePath = store_uploaded_image($_FILES['event_photo'] ?? [], 'event');
+
+    create_event([
+        'name' => $_POST['event_name'] ?? '',
+        'category' => $_POST['event_category'] ?? '',
+        'event_date' => $_POST['event_date'] ?? date('Y-m-d'),
+        'event_time' => $_POST['event_time'] ?? '18:00',
+        'location' => $_POST['event_location'] ?? '',
+        'description' => $_POST['event_description'] ?? '',
+        'ticket_price' => $_POST['event_price'] ?? 0,
+        'available_seats' => $_POST['event_seats'] ?? 0,
+        'image_path' => $imagePath,
+    ]);
+
+    header('Location: events.php?message=event-added');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +50,7 @@
 
     <div class="page-content event-form-card">
         <h2 class="section-title">Create New Event</h2>
-        <form class="form-card event-form" action="events.php" method="post" enctype="multipart/form-data">
+        <form class="form-card event-form" method="post" enctype="multipart/form-data">
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_name">Event Name</label>
@@ -39,6 +64,7 @@
                         <option value="concert">Concert</option>
                         <option value="sports">Sports</option>
                         <option value="theatre">Theatre</option>
+                        <option value="festival">Festival</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -80,4 +106,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
