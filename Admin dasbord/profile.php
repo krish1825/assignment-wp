@@ -1,3 +1,33 @@
+<?php require_once 'session_check.php'; 
+
+$admin_id = $_SESSION['admin_id'];
+$success = '';
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['admin_name']);
+    $email = trim($_POST['admin_email']);
+    $phone = trim($_POST['admin_phone']);
+    $bio = trim($_POST['admin_bio']);
+    
+    if (empty($name) || empty($email) || empty($phone)) {
+        $error = "Name, email, and phone are required.";
+    } else {
+        $stmt = $conn->prepare("UPDATE admins SET full_name = ?, email = ?, phone = ?, bio = ? WHERE id = ?");
+        if ($stmt->execute([$name, $email, $phone, $bio, $admin_id])) {
+            $success = "Profile updated successfully!";
+            $_SESSION['admin_name'] = $name;
+        } else {
+            $error = "Failed to update profile.";
+        }
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM admins WHERE id = ?");
+$stmt->execute([$admin_id]);
+$admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -15,7 +45,7 @@
         <a href="bookings.php">Bookings</a>
         <a href="users.php">Users</a>
         <a href="profile.php" class="active">Profile</a>
-        <a href="sign_in.php">Logout</a>
+        <a href="Sign_in.php?logout=true">Logout</a>
     </div>
 
     <div class="main">
@@ -28,28 +58,41 @@
         <div class="page-content">
             <div class="profile-layout">
                 <div class="profile-card">
-                    <div class="profile-avatar">A</div>
-                    <h2>Admin</h2>
-                    <p>Krish Limbasiya</p>
+                    <div class="profile-avatar"><?php echo strtoupper(substr($admin['full_name'], 0, 1)); ?></div>
+                    <h2><?php echo htmlspecialchars($admin['full_name']); ?></h2>
+                    <p>Super Admin</p>
                     <span class="profile-badge">Active</span>
                 </div>
 
-                <form class="form-card profile-form" id="profileForm" action="#" method="post" novalidate>
+                <form class="form-card profile-form" id="profileForm" action="profile.php" method="post" novalidate>
                     <h2 class="section-title">Profile Details</h2>
+                    
+                    <?php if ($error): ?>
+                        <div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                            <?php echo htmlspecialchars($error); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($success): ?>
+                        <div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                            <?php echo htmlspecialchars($success); ?>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="admin_name">Full Name</label>
-                            <input type="text" id="admin_name" name="admin_name" value="Krish Limbasiy">
+                            <input type="text" id="admin_name" name="admin_name" value="<?php echo htmlspecialchars($admin['full_name']); ?>">
                             <small class="error-message"></small>
                         </div>
                         <div class="form-group">
                             <label for="admin_email">Email</label>
-                            <input type="email" id="admin_email" name="admin_email" value="krish@ticketverse.com">
+                            <input type="email" id="admin_email" name="admin_email" value="<?php echo htmlspecialchars($admin['email']); ?>">
                             <small class="error-message"></small>
                         </div>
                         <div class="form-group">
                             <label for="admin_phone">Phone</label>
-                            <input type="tel" id="admin_phone" name="admin_phone" value="+91 555 123 4567">
+                            <input type="tel" id="admin_phone" name="admin_phone" value="<?php echo htmlspecialchars($admin['phone']); ?>">
                             <small class="error-message"></small>
                         </div>
                         <div class="form-group">
@@ -58,7 +101,7 @@
                         </div>
                         <div class="form-group full-width">
                             <label for="admin_bio">Bio</label>
-                            <textarea id="admin_bio" name="admin_bio" placeholder="Write a short profile bio">Manages events, movies, users, and bookings for TicketVerse.</textarea>
+                            <textarea id="admin_bio" name="admin_bio" placeholder="Write a short profile bio"><?php echo htmlspecialchars($admin['bio'] ?? ''); ?></textarea>
                             <small class="error-message"></small>
                         </div>
                         <div class="form-group full-width">

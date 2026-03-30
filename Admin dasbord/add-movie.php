@@ -1,3 +1,30 @@
+<?php require_once 'session_check.php'; 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
+    $title = $_POST['movie_title'];
+    $genre = $_POST['movie_genre'];
+    $date = $_POST['movie_date'];
+    $duration = $_POST['movie_duration'];
+    $language = $_POST['movie_language'];
+    $description = $_POST['movie_description'];
+    $price = $_POST['movie_price'];
+    $shows = $_POST['movie_shows'];
+    
+    $photo = '';
+    if (isset($_FILES['movie_photo']) && $_FILES['movie_photo']['error'] == 0) {
+        $upload_dir = 'uploads/';
+        if (!is_dir($upload_dir)) mkdir($upload_dir);
+        $photo = time() . '_' . basename($_FILES['movie_photo']['name']);
+        move_uploaded_file($_FILES['movie_photo']['tmp_name'], $upload_dir . $photo);
+    }
+
+    $stmt = $conn->prepare("INSERT INTO movies (title, genre, release_date, duration, language, description, photo, price, shows_per_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$title, $genre, $date, $duration, $language, $description, $photo, $price, $shows]);
+    
+    header("Location: events.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +41,7 @@
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="sign_in.php">Logout</a>
+    <a href="Sign_in.php?logout=true">Logout</a>
 </div>
 
 <div class="main">
@@ -26,7 +53,7 @@
 
     <div class="page-content movie-form-card">
         <h2 class="section-title">Add New Movie</h2>
-        <form class="form-card movie-form" id="movieForm" action="events.php" method="post" enctype="multipart/form-data" novalidate>
+        <form class="form-card movie-form" id="movieForm" action="add-movie.php" method="post" enctype="multipart/form-data" novalidate>
             <div class="form-grid">
                 <div class="form-group">
                     <label for="movie_title">Movie Title</label>

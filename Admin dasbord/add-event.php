@@ -1,3 +1,30 @@
+<?php require_once 'session_check.php'; 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_name'])) {
+    $name = $_POST['event_name'];
+    $category = $_POST['event_category'];
+    $date = $_POST['event_date'];
+    $time = $_POST['event_time'];
+    $location = $_POST['event_location'];
+    $description = $_POST['event_description'];
+    $price = $_POST['event_price'];
+    $seats = $_POST['event_seats'];
+    
+    $photo = '';
+    if (isset($_FILES['event_photo']) && $_FILES['event_photo']['error'] == 0) {
+        $upload_dir = 'uploads/';
+        if (!is_dir($upload_dir)) mkdir($upload_dir);
+        $photo = time() . '_' . basename($_FILES['event_photo']['name']);
+        move_uploaded_file($_FILES['event_photo']['tmp_name'], $upload_dir . $photo);
+    }
+
+    $stmt = $conn->prepare("INSERT INTO events (event_name, category, event_date, event_time, location, description, photo, price, seats) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$name, $category, $date, $time, $location, $description, $photo, $price, $seats]);
+    
+    header("Location: events.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +41,7 @@
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="sign_in.php">Logout</a>
+    <a href="Sign_in.php?logout=true">Logout</a>
 </div>
 
 <div class="main">
@@ -26,7 +53,7 @@
 
     <div class="page-content event-form-card">
         <h2 class="section-title">Create New Event</h2>
-        <form class="form-card event-form" id="eventForm" action="events.php" method="post" enctype="multipart/form-data" novalidate>
+        <form class="form-card event-form" id="eventForm" action="add-event.php" method="post" enctype="multipart/form-data" novalidate>
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_name">Event Name</label>

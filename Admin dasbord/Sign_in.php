@@ -1,3 +1,37 @@
+<?php
+session_start();
+require_once 'db.php';
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: Sign_in.php");
+    exit;
+}
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['admin_email'] ?? '');
+    $password = $_POST['admin_password'] ?? '';
+
+    if (empty($email) || empty($password)) {
+        $error = "Email and password are required.";
+    } else {
+        $stmt = $conn->prepare("SELECT id, full_name, password FROM admins WHERE email = ?");
+        $stmt->execute([$email]);
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin && password_verify($password, $admin['password'])) {
+            $_SESSION['admin_id'] = $admin['id'];
+            $_SESSION['admin_name'] = $admin['full_name'];
+            header("Location: index.php");
+            exit;
+        } else {
+            $error = "Invalid email or password.";
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +50,7 @@
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="sign_in.php" class="active">Logout</a>
+    <a href="Sign_in.php?logout=true" class="active">Logout</a>
 </div>
 
 <div class="main">
@@ -32,7 +66,13 @@
                 <h2 class="section-title">Sign In</h2>
                 <p style="color: var(--muted); margin-bottom: 24px;">Welcome back! Please login to your account</p>
 
-                <form id="adminSignInForm" action="index.php" method="post" novalidate>
+                <?php if ($error): ?>
+                    <div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <form id="adminSignInForm" action="Sign_in.php" method="post" novalidate>
                     <div class="form-group" style="text-align: left;">
                         <input type="email" id="admin_email" name="admin_email" placeholder="Email Address" style="width: 100%; border: 1px solid #bfd8ff; border-radius: 8px; padding: 10px 12px; margin-bottom: 4px; background: var(--surface-soft);">
                         <small class="error-message" style="margin-bottom: 12px;"></small>
