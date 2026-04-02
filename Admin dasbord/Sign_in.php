@@ -1,9 +1,5 @@
 <?php
 session_start();
-<<<<<<< Updated upstream
-
-if (isset($_SESSION['role'])) {
-=======
 if (isset($_SESSION['admin_id'])) {
     header('Location: index1.php');
     exit;
@@ -14,22 +10,10 @@ if (isset($_SESSION['admin_id'])) {
         exit;
     }
 
->>>>>>> Stashed changes
     if ($_SESSION['role'] === 'normal') {
         header('Location: ../Normal%20user/home.php');
         exit;
     }
-<<<<<<< Updated upstream
-
-    if ($_SESSION['role'] === 'admin') {
-        header('Location: ../Admin%20dasbord/index1.php');
-        exit;
-    }
-}
-$error = $_GET['error'] ?? '';
-$success = $_GET['success'] ?? '';
-$user = $_GET['user'] ?? '';
-=======
 }
 
 if (isset($_GET['logout'])) {
@@ -65,18 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 $error = $_GET['error'] ?? '';
->>>>>>> Stashed changes
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In | Ticketvarse</title>
+    <title>Admin Sign In | Ticketvarse</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="signin.css">
 </head>
-<<<<<<< Updated upstream
 <body>
 <header class="navbar">
     <div class="logo">Ticketvarse</div>
@@ -88,12 +70,23 @@ $error = $_GET['error'] ?? '';
         <a href="sign_in.php">My Bookings</a>
         <a href="sign_up.php">Sign Up</a>
     </nav>
+<body class="admin-auth-body">
+<div class="admin-auth-shell">
+<header class="admin-auth-header">
+    <div class="admin-auth-brand">
+        <strong>Ticketvarse Admin</strong>
+        <span>Dashboard access for administrators only</span>
+    </div>
+    <div class="admin-auth-links">
+        <!-- <a href="sign_up.php">Create Admin</a> -->
+        <a href="../guest%20user/Sign_in.php" class="primary-link">User Sign In</a>
+    </div>
 </header>
 <main class="auth-main">
     <div class="login-container">
         <div class="login-box">
-            <h2>Sign In</h2>
-            <p>Welcome back! Please login to your account</p>
+            <h2>Admin Sign In</h2>
+            <p>Welcome back. Sign in to manage Ticketvarse operations.</p>
             <?php if ($success !== ''): ?>
                 <div class="error-box" style="display:block;background:#ecfdf5;color:#166534;border-color:#86efac;"><?= htmlspecialchars($success) ?></div>
             <?php endif; ?>
@@ -105,7 +98,6 @@ $error = $_GET['error'] ?? '';
                 <div class="options">
                     <label><input type="checkbox" name="remember_me"> Remember me</label>
                     <a href="../forgot_password.php">Forgot Password?</a>
-=======
 <body style="background: linear-gradient(165deg, var(--bg-top), var(--bg-bottom));">
 
 <div class="sidebar" id="sidebar">
@@ -163,7 +155,7 @@ $error = $_GET['error'] ?? '';
                 <div class="social-login" style="display: flex; flex-direction: column; gap: 12px;">
                     <button class="google action-btn" style="background: white; color: var(--text); border: 1px solid var(--line); box-shadow: none;">Sign in with Google</button>
                     <button class="facebook action-btn" style="background: #1877f2; color: white;">Sign in with Facebook</button>
->>>>>>> Stashed changes
+
                 </div>
                 <button type="submit">Sign In</button>
             </form>
@@ -177,20 +169,15 @@ $error = $_GET['error'] ?? '';
                 <button class="google" onclick="googleLogin()">Sign in with Google</button>
                 <button class="facebook" onclick="facebookLogin()">Sign in with Facebook</button>
             </div>
-            <p class="signup-link">Don't have an account? <a href="sign_up.php">Sign Up</a></p>
+            <p class="signup-link">Need a new admin account? <a href="sign_up.php">Sign Up</a></p>
+            <p class="auth-note">Use administrator credentials here. Regular users should sign in through the public app.</p>
         </div>
     </div>
 </main>
-<footer class="site-footer">
-    <div class="footer-grid">
-        <div class="footer-col"><h4>Ticketvarse</h4><p>Book movie and event tickets with easy checkout and best prices.</p></div>
-        <div class="footer-col"><h4>Quick Links</h4><a href="home.php">Home</a><a href="movies.php">Movies</a><a href="events.php">Events</a><a href="Offers.php">Offers</a></div>
-        <div class="footer-col"><h4>Support</h4><a href="My_Bookings.php">My Bookings</a><a href="Sign_in.php">Sign In</a><a href="sign_up.php">Sign Up</a></div>
-        <div class="footer-col"><h4>Contact</h4><p>Email: support@ticketvarse.com</p><p>Phone: +91 90000 00000</p></div>
-    </div>
-    <div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div>
-</footer>
+</div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="signin.js"></script>
 </body>
 </html>

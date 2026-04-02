@@ -28,30 +28,7 @@
     });
 
     if (paymentForm) {
-        paymentForm.addEventListener("submit", function (e) {
-            var errors = [];
-            if (activeMethod === "card") {
-                var cardNumber = paymentForm.card_number.value.replace(/\s+/g, "");
-                var cardName = paymentForm.card_name.value.trim();
-                var cardExpiry = paymentForm.card_expiry.value.trim();
-                var cardCvv = paymentForm.card_cvv.value.trim();
-                if (!/^\d{16}$/.test(cardNumber)) errors.push("Enter a valid 16-digit card number.");
-                if (!cardName) errors.push("Cardholder name is required.");
-                if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry)) errors.push("Enter expiry in MM/YY format.");
-                if (!/^\d{3}$/.test(cardCvv)) errors.push("Enter a valid 3-digit CVV.");
-            }
-            if (activeMethod === "upi") {
-                var upi = paymentForm.upi_id.value.trim();
-                if (!/^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(upi)) errors.push("Enter a valid UPI ID.");
-            }
-            if (activeMethod === "netbanking" && !paymentForm.bank_name.value) errors.push("Select a bank to continue.");
-            if (activeMethod === "wallet" && !paymentForm.wallet_name.value) errors.push("Select a wallet to continue.");
-            if (errors.length) {
-                e.preventDefault();
-                paymentErrors.innerHTML = errors.join("<br>");
-                paymentErrors.style.display = "block";
-                return;
-            }
+        paymentForm.addEventListener("submit", function () {
             if (paymentMethodInput) paymentMethodInput.value = activeMethod;
         });
     }

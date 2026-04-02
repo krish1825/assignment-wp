@@ -80,6 +80,8 @@ $user = $_GET['user'] ?? '';
     <div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div>
 </footer>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="sign-in.js"></script>
 </body>
 </html>

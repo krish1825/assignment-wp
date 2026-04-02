@@ -107,7 +107,7 @@ $avatar = strtoupper(substr((string) ($user['full_name'] ?? 'U'), 0, 1));
     <section class="profile-grid">
         <div class="info-card" id="edit-profile">
             <h2>Personal Details</h2>
-            <form class="profile-form" method="post">
+            <form class="profile-form" id="normalProfileForm" method="post" novalidate>
                 <input type="hidden" name="action" value="profile">
                 <div class="form-row">
                     <div class="form-group"><label for="full_name">Full Name</label><input id="full_name" name="full_name" type="text" value="<?= e($user['full_name']) ?>"></div>
@@ -168,7 +168,7 @@ $avatar = strtoupper(substr((string) ($user['full_name'] ?? 'U'), 0, 1));
                 <?php endforeach; ?>
             <?php endif; ?>
             <div class="divider"></div>
-            <form method="post" class="profile-form">
+            <form method="post" class="profile-form" id="paymentMethodForm" novalidate>
                 <input type="hidden" name="action" value="payment_method">
                 <div class="form-row">
                     <div class="form-group"><label for="method_type">Method Type</label><input id="method_type" name="method_type" type="text" placeholder="card / upi / wallet"></div>
@@ -182,5 +182,8 @@ $avatar = strtoupper(substr((string) ($user['full_name'] ?? 'U'), 0, 1));
     </section>
 </div>
 <footer class="site-footer"><div class="footer-grid"><div class="footer-col"><h4>Ticketvarse</h4><p>Book movie and event tickets with easy checkout and best prices.</p></div><div class="footer-col"><h4>Quick Links</h4><a href="home.php">Home</a><a href="movies.php">Movies</a><a href="events.php">Events</a><a href="Offers.php">Offers</a></div><div class="footer-col"><h4>Support</h4><a href="profile.php">Profile</a><a href="My_Bookings.php">My Bookings</a><a href="sign_up.php">Sign Up</a></div><div class="footer-col"><h4>Contact</h4><p>Email: support@ticketvarse.com</p><p>Phone: +91 90000 00000</p></div></div><div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div></footer>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 </body>
 </html>

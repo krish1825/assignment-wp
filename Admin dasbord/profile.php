@@ -1,17 +1,18 @@
 <?php
 
-<<<<<<< Updated upstream
+
 declare(strict_types=1);
 
 require_once 'session_check.php';
 require_once __DIR__ . '/../includes/content_repository.php';
 
 $loginUserId = trim((string) ($_SESSION['user_id'] ?? ''));
-=======
 $admin_id = $_SESSION['admin_id'] ?? null;
 $user_id = $_SESSION['user_id'] ?? null;
->>>>>>> Stashed changes
 $success = '';
+$message = trim((string) ($_GET['message'] ?? ''));
+$success = $message === 'profile-updated' ? 'Profile updated successfully!' : '';
+
 $error = '';
 
 if ($loginUserId === '') {
@@ -28,22 +29,18 @@ if (!$admin || (($admin['role'] ?? '') !== 'admin')) {
 $adminId = (int) $admin['id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-<<<<<<< Updated upstream
     $name = trim((string) ($_POST['admin_name'] ?? ''));
     $email = trim((string) ($_POST['admin_email'] ?? ''));
     $phone = trim((string) ($_POST['admin_phone'] ?? ''));
     $bio = trim((string) ($_POST['admin_bio'] ?? ''));
-=======
     $name = trim($_POST['admin_name']);
     $email = trim($_POST['admin_email']);
     $phone = trim($_POST['admin_phone']);
     $bio = trim($_POST['admin_bio'] ?? '');
->>>>>>> Stashed changes
     
     if ($name === '' || $email === '' || $phone === '') {
         $error = 'Name, email, and phone are required.';
     } else {
-<<<<<<< Updated upstream
         try {
             update_user_profile($adminId, [
                 'full_name' => $name,
@@ -55,11 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'interests' => $admin['interests'] ?? null,
                 'bio' => $bio,
             ]);
-            $success = 'Profile updated successfully!';
-            $admin = find_user_by_numeric_id($adminId) ?? $admin;
+            header('Location: profile.php?message=profile-updated');
+            exit;
         } catch (Throwable $exception) {
             $error = 'Failed to update profile.';
-=======
         if ($admin_id) {
             $stmt = $conn->prepare("UPDATE admins SET full_name = ?, email = ?, phone = ?, bio = ? WHERE id = ?");
             if ($stmt->execute([$name, $email, $phone, $bio, $admin_id])) {
@@ -77,13 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = "Failed to update profile.";
             }
->>>>>>> Stashed changes
         }
     }
 }
 
-<<<<<<< Updated upstream
-=======
 $admin = false;
 if ($admin_id) {
     $stmt = $conn->prepare("SELECT * FROM admins WHERE id = ?");
@@ -101,7 +94,6 @@ if (!$admin) {
     $admin = ['full_name' => 'Admin User', 'email' => '', 'phone' => '', 'bio' => ''];
 }
 
->>>>>>> Stashed changes
 ?>
 <!DOCTYPE html>
 <html>
@@ -120,7 +112,7 @@ if (!$admin) {
         <a href="bookings.php">Bookings</a>
         <a href="users.php">Users</a>
         <a href="profile.php" class="active">Profile</a>
-        <a href="Sign_in.php?logout=true">Logout</a>
+        <a href="logout.php">Logout</a>
     </div>
 
     <div class="main">
@@ -131,9 +123,15 @@ if (!$admin) {
         </div>
 
         <div class="page-content">
+            <div class="page-intro">
+                <div>
+                    <h1>Profile Settings</h1>
+                    <p>Keep your administrator contact details up to date.</p>
+                </div>
+            </div>
             <div class="profile-layout">
                 <div class="profile-card">
-                    <div class="profile-avatar"><?php echo strtoupper(substr($admin['full_name'], 0, 1)); ?></div>
+                    <div class="profile-avatar"><?php echo htmlspecialchars(strtoupper(substr((string) ($admin['full_name'] ?? 'A'), 0, 1))); ?></div>
                     <h2><?php echo htmlspecialchars($admin['full_name']); ?></h2>
                     <p>Super Admin</p>
                     <span class="profile-badge">Active</span>
@@ -143,13 +141,13 @@ if (!$admin) {
                     <h2 class="section-title">Profile Details</h2>
                     
                     <?php if ($error): ?>
-                        <div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                        <div class="notice-card">
                             <?php echo htmlspecialchars($error); ?>
                         </div>
                     <?php endif; ?>
 
                     <?php if ($success): ?>
-                        <div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                        <div class="notice-card success">
                             <?php echo htmlspecialchars($success); ?>
                         </div>
                     <?php endif; ?>
@@ -189,107 +187,9 @@ if (!$admin) {
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+    <script src="../assets/js/form-validation.js"></script>
     <script src="script.js"></script>
-    <script>
-        $(function () {
-            var $form = $("#profileForm");
-
-            function setError($field, message) {
-                $field.addClass("has-error");
-                $field.closest(".form-group").find(".error-message").text(message);
-            }
-
-            function clearError($field) {
-                $field.removeClass("has-error");
-                $field.closest(".form-group").find(".error-message").text("");
-            }
-
-            function validateName() {
-                var $field = $("#admin_name");
-                var value = $.trim($field.val());
-
-                if (value.length < 3) {
-                    setError($field, "Name must be at least 3 characters.");
-                    return false;
-                }
-
-                if (!/^[a-zA-Z\s.]+$/.test(value)) {
-                    setError($field, "Name can contain letters, spaces, and dots only.");
-                    return false;
-                }
-
-                clearError($field);
-                return true;
-            }
-
-            function validateEmail() {
-                var $field = $("#admin_email");
-                var value = $.trim($field.val());
-                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-                if (!emailPattern.test(value)) {
-                    setError($field, "Enter a valid email address.");
-                    return false;
-                }
-
-                clearError($field);
-                return true;
-            }
-
-            function validatePhone() {
-                var $field = $("#admin_phone");
-                var value = $.trim($field.val());
-
-                if (value === "") {
-                    setError($field, "Phone number is required.");
-                    return false;
-                }
-
-                var digitsOnly = value.replace(/\D/g, "");
-                if (digitsOnly.length < 10 || digitsOnly.length > 15) {
-                    setError($field, "Phone number must be 10 to 15 digits.");
-                    return false;
-                }
-
-                clearError($field);
-                return true;
-            }
-
-            function validateBio() {
-                var $field = $("#admin_bio");
-                var value = $.trim($field.val());
-
-                if (value.length < 10) {
-                    setError($field, "Bio must be at least 10 characters.");
-                    return false;
-                }
-
-                if (value.length > 250) {
-                    setError($field, "Bio must be less than 250 characters.");
-                    return false;
-                }
-
-                clearError($field);
-                return true;
-            }
-
-            $("#admin_name").on("input blur", validateName);
-            $("#admin_email").on("input blur", validateEmail);
-            $("#admin_phone").on("input blur", validatePhone);
-            $("#admin_bio").on("input blur", validateBio);
-
-            $form.on("submit", function (event) {
-                var isNameValid = validateName();
-                var isEmailValid = validateEmail();
-                var isPhoneValid = validatePhone();
-                var isBioValid = validateBio();
-
-                if (!isNameValid || !isEmailValid || !isPhoneValid || !isBioValid) {
-                    event.preventDefault();
-                }
-            });
-        });
-    </script>
 
 </body>
 

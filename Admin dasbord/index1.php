@@ -48,7 +48,7 @@ $total_revenue = $stmt->fetchColumn();
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="../logout.php">Logout</a>
+    <a href="logout.php">Logout</a>
 </div>
 
 <div class="main">
@@ -59,6 +59,12 @@ $total_revenue = $stmt->fetchColumn();
     </div>
 
     <div class="page-content">
+        <div class="page-intro">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p>Track events, bookings, revenue, and user growth from one place.</p>
+            </div>
+        </div>
         <div class="admin-actions fixed-bottom-left">
             <a class="action-btn add-event-btn" href="add-event.php">Add Event</a>
             <a class="action-btn add-movie-btn" href="add-movie.php">Add Movie</a>
