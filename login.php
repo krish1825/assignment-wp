@@ -31,6 +31,11 @@ if (($user['status'] ?? 'active') !== 'active') {
     exit;
 }
 
+if (!is_user_email_verified($user)) {
+    header('Location: ' . $fallback . '?error=' . rawurlencode('Please verify your email before signing in.') . '&user=' . rawurlencode($userId));
+    exit;
+}
+
 $_SESSION['user_id'] = $user['user_id'];
 $_SESSION['role'] = $user['role'];
 

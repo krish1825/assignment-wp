@@ -1,31 +1,54 @@
-<?php require_once 'session_check.php'; 
+<?php
 
-$admin_id = $_SESSION['admin_id'];
+declare(strict_types=1);
+
+require_once 'session_check.php';
+require_once __DIR__ . '/../includes/content_repository.php';
+
+$loginUserId = trim((string) ($_SESSION['user_id'] ?? ''));
 $success = '';
 $error = '';
 
+if ($loginUserId === '') {
+    header('Location: Sign_in.php?error=Please%20sign%20in%20again');
+    exit;
+}
+
+$admin = find_user_for_login($loginUserId);
+if (!$admin || (($admin['role'] ?? '') !== 'admin')) {
+    header('Location: Sign_in.php?error=Admin%20account%20not%20found');
+    exit;
+}
+
+$adminId = (int) $admin['id'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['admin_name']);
-    $email = trim($_POST['admin_email']);
-    $phone = trim($_POST['admin_phone']);
-    $bio = trim($_POST['admin_bio']);
+    $name = trim((string) ($_POST['admin_name'] ?? ''));
+    $email = trim((string) ($_POST['admin_email'] ?? ''));
+    $phone = trim((string) ($_POST['admin_phone'] ?? ''));
+    $bio = trim((string) ($_POST['admin_bio'] ?? ''));
     
-    if (empty($name) || empty($email) || empty($phone)) {
-        $error = "Name, email, and phone are required.";
+    if ($name === '' || $email === '' || $phone === '') {
+        $error = 'Name, email, and phone are required.';
     } else {
-        $stmt = $conn->prepare("UPDATE admins SET full_name = ?, email = ?, phone = ?, bio = ? WHERE id = ?");
-        if ($stmt->execute([$name, $email, $phone, $bio, $admin_id])) {
-            $success = "Profile updated successfully!";
-            $_SESSION['admin_name'] = $name;
-        } else {
-            $error = "Failed to update profile.";
+        try {
+            update_user_profile($adminId, [
+                'full_name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'dob' => $admin['dob'] ?? null,
+                'gender' => $admin['gender'] ?? null,
+                'country' => $admin['country'] ?? null,
+                'interests' => $admin['interests'] ?? null,
+                'bio' => $bio,
+            ]);
+            $success = 'Profile updated successfully!';
+            $admin = find_user_by_numeric_id($adminId) ?? $admin;
+        } catch (Throwable $exception) {
+            $error = 'Failed to update profile.';
         }
     }
 }
-
-$stmt = $conn->prepare("SELECT * FROM admins WHERE id = ?");
-$stmt->execute([$admin_id]);
-$admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -50,7 +73,7 @@ $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
     <div class="main">
         <div class="topbar">
-            <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+            <button class="toggle-btn" onclick="toggleSidebar()">&#9776;</button>
             <h3>Admin Profile</h3>
             <a class="profile-btn" href="profile.php">Admin Profile</a>
         </div>

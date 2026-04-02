@@ -1,0 +1,26 @@
+[2026-04-02 03:18:09]
+To: flowtest_1775099888@example.com
+Subject: Verify your Ticketvarse email address
+Hello Flow Test,
+
+Please verify your email address by opening the link below:
+http://localhost./verify_email.php?token=a9ae334b3bfc2bec920637e011a5277a4ce90e49d0f7e7380f351da16ed6336f
+
+This link will expire in 24 hours.
+
+If you did not create this account, you can ignore this email.
+
+
+[2026-04-02 03:18:23]
+To: flowtest_1775099902@example.com
+Subject: Verify your Ticketvarse email address
+Hello Flow Test,
+
+Please verify your email address by opening the link below:
+http://localhost./verify_email.php?token=d2b410c3fd97c9fdf1107b8c1cb5bef8f54e0583b6f394a37dbc1e2b679106b3
+
+This link will expire in 24 hours.
+
+If you did not create this account, you can ignore this email.
+
+

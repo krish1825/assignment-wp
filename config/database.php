@@ -91,6 +91,9 @@ function ticketvarse_ensure_schema(PDO $pdo): void
             password VARCHAR(255) NOT NULL,
             role VARCHAR(20) NOT NULL DEFAULT "normal",
             status VARCHAR(20) NOT NULL DEFAULT "active",
+            email_verified_at DATETIME NULL,
+            verification_token_hash VARCHAR(64) NULL,
+            verification_token_expires_at DATETIME NULL,
             phone VARCHAR(20) NULL,
             dob DATE NULL,
             gender VARCHAR(20) NULL,
@@ -99,6 +102,18 @@ function ticketvarse_ensure_schema(PDO $pdo): void
             bio TEXT NULL,
             photo_path VARCHAR(255) NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
+    );
+
+    $pdo->exec(
+        'CREATE TABLE IF NOT EXISTS password_resets (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            token_hash VARCHAR(64) NOT NULL UNIQUE,
+            expires_at DATETIME NOT NULL,
+            used_at DATETIME NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
     );
 
@@ -170,6 +185,9 @@ function ticketvarse_ensure_schema(PDO $pdo): void
     ticketvarse_ensure_column($pdo, 'events', 'status', 'ALTER TABLE events ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT "active"');
     ticketvarse_ensure_column($pdo, 'users', 'role', 'ALTER TABLE users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT "normal"');
     ticketvarse_ensure_column($pdo, 'users', 'status', 'ALTER TABLE users ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT "active"');
+    ticketvarse_ensure_column($pdo, 'users', 'email_verified_at', 'ALTER TABLE users ADD COLUMN email_verified_at DATETIME NULL');
+    ticketvarse_ensure_column($pdo, 'users', 'verification_token_hash', 'ALTER TABLE users ADD COLUMN verification_token_hash VARCHAR(64) NULL');
+    ticketvarse_ensure_column($pdo, 'users', 'verification_token_expires_at', 'ALTER TABLE users ADD COLUMN verification_token_expires_at DATETIME NULL');
     ticketvarse_ensure_column($pdo, 'users', 'phone', 'ALTER TABLE users ADD COLUMN phone VARCHAR(20) NULL');
     ticketvarse_ensure_column($pdo, 'users', 'dob', 'ALTER TABLE users ADD COLUMN dob DATE NULL');
     ticketvarse_ensure_column($pdo, 'users', 'gender', 'ALTER TABLE users ADD COLUMN gender VARCHAR(20) NULL');
@@ -177,6 +195,7 @@ function ticketvarse_ensure_schema(PDO $pdo): void
     ticketvarse_ensure_column($pdo, 'users', 'interests', 'ALTER TABLE users ADD COLUMN interests TEXT NULL');
     ticketvarse_ensure_column($pdo, 'users', 'bio', 'ALTER TABLE users ADD COLUMN bio TEXT NULL');
     ticketvarse_ensure_column($pdo, 'users', 'photo_path', 'ALTER TABLE users ADD COLUMN photo_path VARCHAR(255) NULL');
+    $pdo->exec('UPDATE users SET email_verified_at = created_at WHERE email_verified_at IS NULL AND verification_token_hash IS NULL AND verification_token_expires_at IS NULL');
 
     $movieCount = (int) $pdo->query('SELECT COUNT(*) FROM movies')->fetchColumn();
     if ($movieCount === 0) {
@@ -220,14 +239,14 @@ function ticketvarse_ensure_schema(PDO $pdo): void
     if ($userCount === 0) {
         $userStatement = $pdo->prepare(
             'INSERT INTO users
-                (user_id, full_name, email, password, role, status, phone, country)
+                (user_id, full_name, email, password, role, status, email_verified_at, phone, country)
              VALUES
-                (:user_id, :full_name, :email, :password, :role, :status, :phone, :country)'
+                (:user_id, :full_name, :email, :password, :role, :status, :email_verified_at, :phone, :country)'
         );
         $users = [
-            ['user_id' => 'admin001', 'full_name' => 'Admin User', 'email' => 'admin@ticketvarse.com', 'password' => 'admin@123', 'role' => 'admin', 'status' => 'active', 'phone' => '9999999999', 'country' => 'India'],
-            ['user_id' => 'user001', 'full_name' => 'Krish', 'email' => 'krish@email.com', 'password' => 'user@123', 'role' => 'normal', 'status' => 'active', 'phone' => '9876543210', 'country' => 'India'],
-            ['user_id' => 'user002', 'full_name' => 'Rahul', 'email' => 'rahul@email.com', 'password' => 'user@123', 'role' => 'normal', 'status' => 'active', 'phone' => '9123456780', 'country' => 'India'],
+            ['user_id' => 'admin001', 'full_name' => 'Admin User', 'email' => 'admin@ticketvarse.com', 'password' => 'admin@123', 'role' => 'admin', 'status' => 'active', 'email_verified_at' => date('Y-m-d H:i:s'), 'phone' => '9999999999', 'country' => 'India'],
+            ['user_id' => 'user001', 'full_name' => 'Krish', 'email' => 'krish@email.com', 'password' => 'user@123', 'role' => 'normal', 'status' => 'active', 'email_verified_at' => date('Y-m-d H:i:s'), 'phone' => '9876543210', 'country' => 'India'],
+            ['user_id' => 'user002', 'full_name' => 'Rahul', 'email' => 'rahul@email.com', 'password' => 'user@123', 'role' => 'normal', 'status' => 'active', 'email_verified_at' => date('Y-m-d H:i:s'), 'phone' => '9123456780', 'country' => 'India'],
         ];
         foreach ($users as $user) {
             $userStatement->execute($user);

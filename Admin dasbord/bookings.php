@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 
 declare(strict_types=1);
@@ -6,46 +5,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/content_repository.php';
 
 $bookings = fetch_all_bookings();
-=======
-<?php require_once 'session_check.php'; 
-
-if (isset($_GET['action'])) {
-    $id = (int)$_GET['id'];
-    $action = $_GET['action'];
-    
-    if ($action === 'delete') {
-        $stmt = $conn->prepare("DELETE FROM bookings WHERE id = ?");
-        $stmt->execute([$id]);
-    } elseif ($action === 'confirm') {
-        $stmt = $conn->prepare("UPDATE bookings SET status = 'Confirmed' WHERE id = ?");
-        $stmt->execute([$id]);
-    } elseif ($action === 'cancel') {
-        $stmt = $conn->prepare("UPDATE bookings SET status = 'Cancelled' WHERE id = ?");
-        $stmt->execute([$id]);
-    }
-    header("Location: bookings.php");
-    exit;
-}
-
-$stmt = $conn->query("
-    SELECT 
-        b.id,
-        u.full_name as user_name,
-        CASE 
-            WHEN b.event_type = 'Event' THEN e.event_name
-            WHEN b.event_type = 'Movie' THEN m.title
-        END as event_name,
-        b.seats,
-        b.status
-    FROM bookings b
-    JOIN users u ON b.user_id = u.id
-    LEFT JOIN events e ON b.event_type = 'Event' AND b.event_id = e.id
-    LEFT JOIN movies m ON b.event_type = 'Movie' AND b.event_id = m.id
-    ORDER BY b.created_at DESC
-");
-$bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
 ?>
 <!DOCTYPE html>
 <html>
@@ -66,12 +25,11 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 <div class="main">
     <div class="topbar">
-        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+        <button class="toggle-btn" onclick="toggleSidebar()">&#9776;</button>
         <h3>Bookings</h3>
         <a class="profile-btn" href="profile.php">Admin Profile</a>
     </div>
     <div class="page-content">
-<<<<<<< HEAD
         <h3>All Bookings</h3>
         <div class="table-wrap">
             <table>
@@ -97,43 +55,6 @@ $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             </table>
         </div>
-=======
-        
-<div class="card" style="padding: 0;">
-    <h3 style="padding: 22px 22px 10px 22px;">All Bookings</h3>
-    <table style="border: none; border-radius: 0; box-shadow: none;">
-    <tr><th>ID</th><th>User</th><th>Event</th><th>Seats</th><th>Status</th><th>Actions</th></tr>
-    <?php if (empty($bookings)): ?>
-    <tr><td colspan="6" style="text-align: center;">No bookings found.</td></tr>
-    <?php else: ?>
-        <?php foreach ($bookings as $b): ?>
-        <tr>
-            <td><?php echo htmlspecialchars($b['id']); ?></td>
-            <td><?php echo htmlspecialchars($b['user_name']); ?></td>
-            <td><?php echo htmlspecialchars($b['event_name']); ?></td>
-            <td><?php echo htmlspecialchars($b['seats']); ?></td>
-            <td>
-                <?php 
-                    $badge_class = 'warning';
-                    if ($b['status'] === 'Confirmed') $badge_class = 'success';
-                    elseif ($b['status'] === 'Cancelled') $badge_class = 'danger'; // Assuming .badge-danger exists or falls back
-                ?>
-                <span class="badge badge-<?php echo $badge_class; ?>"><?php echo htmlspecialchars($b['status']); ?></span>
-            </td>
-            <td class="actions-cell">
-                <?php if ($b['status'] === 'Pending'): ?>
-                    <a href="bookings.php?action=confirm&id=<?php echo $b['id']; ?>" class="btn-icon btn-edit" title="Confirm" style="color: green;">✓</a>
-                    <a href="bookings.php?action=cancel&id=<?php echo $b['id']; ?>" class="btn-icon btn-edit" title="Cancel" style="color: orange;">✕</a>
-                <?php endif; ?>
-                <a href="bookings.php?action=delete&id=<?php echo $b['id']; ?>" class="btn-icon btn-delete" title="Delete" onclick="return confirm('Delete this booking?');">🗑</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    <?php endif; ?>
-    </table>
-</div>
-
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
     </div>
 </div>
 <script src="script.js"></script>

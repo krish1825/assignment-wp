@@ -1,8 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: Sign_in.php");
     exit;
 }
-require_once 'db.php';
 ?>

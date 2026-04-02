@@ -57,9 +57,14 @@ $user = $_GET['user'] ?? '';
                 <input type="hidden" name="origin" value="normal">
                 <div class="options">
                     <label><input type="checkbox" name="remember_me"> Remember me</label>
-                    <a href="#">Forgot Password?</a>
+                    <a href="../forgot_password.php">Forgot Password?</a>
                 </div>
                 <button type="submit">Sign In</button>
+            </form>
+            <form action="../resend_verification.php" method="post" style="margin-top:12px;">
+                <input type="hidden" name="origin" value="normal">
+                <input type="hidden" name="user_id" value="<?= htmlspecialchars($user) ?>">
+                <button type="submit" style="width:100%;background:#111827;color:#fff;border:none;padding:12px;border-radius:8px;cursor:pointer;">Resend Verification Email</button>
             </form>
             <div class="divider">OR</div>
             <div class="social-login">

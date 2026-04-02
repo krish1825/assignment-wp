@@ -42,7 +42,20 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL DEFAULT 'normal',
     status VARCHAR(20) NOT NULL DEFAULT 'active',
+    email_verified_at DATETIME NULL,
+    verification_token_hash VARCHAR(64) NULL,
+    verification_token_expires_at DATETIME NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token_hash VARCHAR(64) NOT NULL UNIQUE,
+    expires_at DATETIME NOT NULL,
+    used_at DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS movie_schedules (
@@ -74,8 +87,8 @@ VALUES
     ('Food & Music Fest', 'festival', '2026-04-05', '17:00:00', 'Riverfront Ground, Ahmedabad', 'Street food, indie artists, and an open-air festival vibe.', 499, 500, 'weekend-combo-offer.jpg', 'active');
 
 INSERT INTO users
-    (user_id, full_name, email, password, role, status)
+    (user_id, full_name, email, password, role, status, email_verified_at)
 VALUES
-    ('admin001', 'Admin User', 'admin@ticketvarse.com', 'admin@123', 'admin', 'active'),
-    ('user001', 'Krish', 'krish@email.com', 'user@123', 'normal', 'active'),
-    ('user002', 'Rahul', 'rahul@email.com', 'user@123', 'normal', 'active');
+    ('admin001', 'Admin User', 'admin@ticketvarse.com', 'admin@123', 'admin', 'active', NOW()),
+    ('user001', 'Krish', 'krish@email.com', 'user@123', 'normal', 'active', NOW()),
+    ('user002', 'Rahul', 'rahul@email.com', 'user@123', 'normal', 'active', NOW());

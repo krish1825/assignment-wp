@@ -86,7 +86,7 @@ if ($errors !== []) {
 try {
     $photoPath = store_uploaded_image($_FILES['photo'] ?? [], 'user');
 
-    create_registered_user([
+    $newUserId = create_registered_user([
         'user_id' => $username,
         'full_name' => $fullName,
         'email' => $email,
@@ -99,9 +99,17 @@ try {
         'bio' => $bio,
         'photo_path' => $photoPath,
     ]);
+
+    $user = find_user_by_numeric_id($newUserId);
+    if ($user === null) {
+        throw new RuntimeException('User record could not be loaded after registration.');
+    }
+
+    send_verification_for_user($user);
 } catch (Throwable $exception) {
     registration_redirect($signupPath, $formData, 'Registration failed. ' . $exception->getMessage());
 }
 
-header('Location: ' . $signinPath . '?success=Registration%20completed.%20Please%20sign%20in.&user=' . rawurlencode($username));
+$successMessage = 'Registration completed. Please verify your email before signing in. A verification link was saved to storage/mail/verification.log for local testing.';
+header('Location: ' . $signinPath . '?success=' . rawurlencode($successMessage) . '&user=' . rawurlencode($username));
 exit;

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/mail_helper.php';
 
 function db(): PDO
 {
@@ -35,6 +36,69 @@ function guest_media_path(?string $imagePath, string $fallback): string
         return $normalized;
     }
     return '../' . ltrim($normalized, '/');
+}
+
+function find_user_by_identifier(string $identifier): ?array
+{
+    $statement = db()->prepare(
+        'SELECT * FROM users WHERE user_id = :identifier OR email = :identifier LIMIT 1'
+    );
+    $statement->execute(['identifier' => $identifier]);
+    $user = $statement->fetch();
+
+    return $user === false ? null : $user;
+}
+
+function create_password_reset_request(int $userId, string $tokenHash, string $expiresAt): bool
+{
+    $statement = db()->prepare(
+        'INSERT INTO password_resets (user_id, token_hash, expires_at) VALUES (:user_id, :token_hash, :expires_at)'
+    );
+
+    return $statement->execute([
+        'user_id' => $userId,
+        'token_hash' => $tokenHash,
+        'expires_at' => $expiresAt,
+    ]);
+}
+
+function find_password_reset_by_token(string $token): ?array
+{
+    $tokenHash = hash('sha256', $token);
+    $statement = db()->prepare(
+        'SELECT pr.*, u.user_id AS user_login_id, u.email AS user_email, u.role AS user_role
+         FROM password_resets pr
+         JOIN users u ON u.id = pr.user_id
+         WHERE pr.token_hash = :token_hash
+         LIMIT 1'
+    );
+    $statement->execute(['token_hash' => $tokenHash]);
+    $reset = $statement->fetch();
+
+    if ($reset === false) {
+        return null;
+    }
+
+    if ($reset['used_at'] !== null || strtotime($reset['expires_at']) < time()) {
+        return null;
+    }
+
+    return $reset;
+}
+
+function mark_password_reset_as_used(int $resetId): bool
+{
+    $statement = db()->prepare(
+        'UPDATE password_resets SET used_at = NOW() WHERE id = :id'
+    );
+
+    return $statement->execute(['id' => $resetId]);
+}
+
+function update_user_password(int $userId, string $password): bool
+{
+    $statement = db()->prepare('UPDATE users SET password = :password WHERE id = :id');
+    return $statement->execute(['password' => $password, 'id' => $userId]);
 }
 
 function movie_schedule_catalog(): array
@@ -402,6 +466,14 @@ function find_user_for_login(string $userId): ?array
     return $user ?: null;
 }
 
+function find_user_by_email(string $email): ?array
+{
+    $statement = db()->prepare('SELECT * FROM users WHERE email = :email LIMIT 1');
+    $statement->execute(['email' => trim($email)]);
+    $user = $statement->fetch();
+    return $user ?: null;
+}
+
 function find_user_by_numeric_id(int $id): ?array
 {
     $statement = db()->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');
@@ -417,9 +489,10 @@ function user_exists(string $userId, string $email): bool
     return (int) $statement->fetchColumn() > 0;
 }
 
-function create_registered_user(array $payload): void
+function create_registered_user(array $payload): int
 {
-    $statement = db()->prepare(
+    $pdo = db();
+    $statement = $pdo->prepare(
         'INSERT INTO users
             (user_id, full_name, email, password, role, status, phone, dob, gender, country, interests, bio, photo_path)
          VALUES
@@ -440,6 +513,88 @@ function create_registered_user(array $payload): void
         'bio' => trim((string) ($payload['bio'] ?? '')) ?: null,
         'photo_path' => trim((string) ($payload['photo_path'] ?? '')) ?: null,
     ]);
+    return (int) $pdo->lastInsertId();
+}
+
+function is_user_email_verified(array $user): bool
+{
+    return trim((string) ($user['email_verified_at'] ?? '')) !== '';
+}
+
+function generate_email_verification(int $userId, int $ttlHours = 24): ?string
+{
+    if ($userId <= 0) {
+        return null;
+    }
+
+    $token = bin2hex(random_bytes(32));
+    $tokenHash = hash('sha256', $token);
+    $expiresAt = date('Y-m-d H:i:s', strtotime('+' . $ttlHours . ' hours'));
+
+    $statement = db()->prepare(
+        'UPDATE users
+         SET verification_token_hash = :token_hash, verification_token_expires_at = :expires_at
+         WHERE id = :id'
+    );
+    $statement->execute([
+        'token_hash' => $tokenHash,
+        'expires_at' => $expiresAt,
+        'id' => $userId,
+    ]);
+
+    return $token;
+}
+
+function send_email_verification_message(array $user, string $token): array
+{
+    $verificationLink = ticketvarse_app_url() . '/verify_email.php?token=' . rawurlencode($token);
+    $subject = 'Verify your Ticketvarse email address';
+    $body = "Hello " . trim((string) ($user['full_name'] ?? $user['user_id'])) . ",\n\n"
+        . "Please verify your email address by opening the link below:\n"
+        . $verificationLink . "\n\n"
+        . "This link will expire in 24 hours.\n\n"
+        . "If you did not create this account, you can ignore this email.\n";
+
+    return ticketvarse_send_mail((string) $user['email'], $subject, $body);
+}
+
+function send_verification_for_user(array $user): array
+{
+    $userId = (int) ($user['id'] ?? 0);
+    if ($userId <= 0) {
+        throw new RuntimeException('Invalid user for verification.');
+    }
+
+    $token = generate_email_verification($userId);
+    if ($token === null) {
+        throw new RuntimeException('Could not generate verification token.');
+    }
+
+    return send_email_verification_message($user, $token);
+}
+
+function find_user_by_verification_token(string $token): ?array
+{
+    $statement = db()->prepare(
+        'SELECT * FROM users
+         WHERE verification_token_hash = :token_hash
+           AND verification_token_expires_at IS NOT NULL
+           AND verification_token_expires_at >= NOW()
+         LIMIT 1'
+    );
+    $statement->execute(['token_hash' => hash('sha256', $token)]);
+    $user = $statement->fetch();
+    return $user ?: null;
+}
+
+function mark_user_email_verified(int $userId): void
+{
+    $statement = db()->prepare(
+        'UPDATE users
+         SET email_verified_at = NOW(), verification_token_hash = NULL, verification_token_expires_at = NULL
+         WHERE id = :id'
+    );
+    $statement->execute(['id' => $userId]);
 }
 
 function update_user_profile(int $id, array $payload): void
@@ -745,3 +900,4 @@ function delete_movie_schedule(int $movieId, int $scheduleId): void
     $deleteStatement->execute(['id' => $scheduleId, 'movie_id' => $movieId]);
     sync_movie_shows_per_day($movieId);
 }
+

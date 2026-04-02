@@ -26,7 +26,6 @@ body {
     align-items: center;
 }
 
-/* Login Box */
 .login-box {
     background: #ffffff;
     padding: 35px;
@@ -46,7 +45,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* Inputs */
 .login-box input {
     width: 100%;
     padding: 12px;
@@ -62,7 +60,6 @@ body {
     box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.16);
 }
 
-/* Options */
 .options {
     display: flex;
     justify-content: space-between;
@@ -75,7 +72,6 @@ body {
     color: #0284c7;
 }
 
-/* Button */
 .login-box button[type="submit"] {
     width: 100%;
     padding: 12px;
@@ -91,14 +87,12 @@ body {
     filter: brightness(0.95);
 }
 
-/* Divider */
 .divider {
     margin: 20px 0;
     font-size: 14px;
     color: #9ca3af;
 }
 
-/* Social Login */
 .social-login button {
     width: 100%;
     padding: 10px;
@@ -119,7 +113,6 @@ body {
     color: white;
 }
 
-/* Signup */
 .signup-link {
     margin-top: 15px;
     font-size: 14px;
@@ -140,8 +133,3 @@ body {
     margin-bottom: 12px;
     text-align: left;
 }
-
-.field-error {
-    border-color: #dc2626 !important;
-}
-

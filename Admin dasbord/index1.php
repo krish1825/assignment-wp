@@ -1,4 +1,3 @@
-<<<<<<< HEAD:Admin dasbord/index1.php
 <?php
 session_start();
 
@@ -6,12 +5,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: Sign_in.php?error=Please%20sign%20in%20as%20admin');
     exit;
 }
-=======
-<?php require_once 'session_check.php'; 
+
+require_once 'db.php'; 
 
 // Fetch total events (events + movies)
-$stmt = $conn->query("SELECT (SELECT COUNT(*) FROM events) + (SELECT COUNT(*) FROM movies) as total");
-$total_events = $stmt->fetchColumn();
+$event_count_stmt = $conn->query("SELECT COUNT(*) FROM events");
+$movie_count_stmt = $conn->query("SELECT COUNT(*) FROM movies");
+$total_events = (int) $event_count_stmt->fetchColumn() + (int) $movie_count_stmt->fetchColumn();
 
 // Fetch total users
 $stmt = $conn->query("SELECT COUNT(*) FROM users");
@@ -21,17 +21,13 @@ $total_users = $stmt->fetchColumn();
 $stmt = $conn->query("SELECT COUNT(*) FROM bookings");
 $total_bookings = $stmt->fetchColumn();
 
-// Fetch total revenue
+// Fetch total revenue from confirmed and upcoming bookings
 $stmt = $conn->query("
-    SELECT IFNULL(SUM(cases.total), 0) as revenue FROM (
-        SELECT b.seats * e.price as total FROM bookings b JOIN events e ON b.event_id = e.id WHERE b.event_type = 'Event' AND b.status = 'Confirmed'
-        UNION ALL
-        SELECT b.seats * m.price as total FROM bookings b JOIN movies m ON b.event_id = m.id WHERE b.event_type = 'Movie' AND b.status = 'Confirmed'
-    ) as cases
+    SELECT COALESCE(SUM(total_amount), 0)
+    FROM bookings
+    WHERE booking_status IN ('confirmed', 'upcoming')
 ");
 $total_revenue = $stmt->fetchColumn();
-
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf:Admin dasbord/index.php
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,20 +39,12 @@ $total_revenue = $stmt->fetchColumn();
 <body>
 <div class="sidebar" id="sidebar">
     <div class="logo">🎟 TicketVerse</div>
-<<<<<<< HEAD:Admin dasbord/index1.php
-    <a href="index1.php">Dashboard</a>
-=======
-    <a href="index.php" class="active">Dashboard</a>
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf:Admin dasbord/index.php
+    <a href="index1.php" class="active">Dashboard</a>
     <a href="events.php">Manage Events</a>
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-<<<<<<< HEAD:Admin dasbord/index1.php
     <a href="../logout.php">Logout</a>
-=======
-    <a href="Sign_in.php?logout=true">Logout</a>
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf:Admin dasbord/index.php
 </div>
 
 <div class="main">
