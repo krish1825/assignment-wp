@@ -1,31 +1,4 @@
-<<<<<<< HEAD
-<?php
 
-declare(strict_types=1);
-
-require_once __DIR__ . '/../includes/content_repository.php';
-
-$scheduleCatalog = movie_schedule_catalog();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $imagePath = store_uploaded_image($_FILES['movie_photo'] ?? [], 'movie');
-    $schedulePayload = json_decode((string) ($_POST['movie_schedule_payload'] ?? '[]'), true);
-
-    create_movie([
-        'title' => $_POST['movie_title'] ?? '',
-        'genre' => $_POST['movie_genre'] ?? '',
-        'release_date' => $_POST['movie_date'] ?? date('Y-m-d'),
-        'duration_minutes' => $_POST['movie_duration'] ?? 0,
-        'language' => $_POST['movie_language'] ?? '',
-        'description' => $_POST['movie_description'] ?? '',
-        'ticket_price' => $_POST['movie_price'] ?? 0,
-        'shows_per_day' => $_POST['movie_shows'] ?? 1,
-        'image_path' => $imagePath,
-        'schedules' => is_array($schedulePayload) ? $schedulePayload : [],
-    ]);
-
-    header('Location: events.php?message=movie-added');
-=======
 <?php require_once 'session_check.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
@@ -50,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
     $stmt->execute([$title, $genre, $date, $duration, $language, $description, $photo, $price, $shows]);
     
     header("Location: events.php");
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
     exit;
 }
 ?>
@@ -82,11 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
 
     <div class="page-content movie-form-card">
         <h2 class="section-title">Add New Movie</h2>
-<<<<<<< HEAD
-        <form class="form-card movie-form" method="post" enctype="multipart/form-data">
-=======
         <form class="form-card movie-form" id="movieForm" action="add-movie.php" method="post" enctype="multipart/form-data" novalidate>
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
             <div class="form-grid">
                 <div class="form-group">
                     <label for="movie_title">Movie Title</label>
@@ -458,9 +426,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
     renderSchedules();
 })();
 </script>
-=======
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
+
 <script src="script.js"></script>
 <script>
     $(function () {

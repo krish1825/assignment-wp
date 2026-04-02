@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/content_repository.php';
+require_once 'session_check.php';
 
 $scheduleCatalog = movie_schedule_catalog();
 
@@ -38,6 +39,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+<<<<<<< Updated upstream
+=======
+if (isset($_GET['delete_type']) && isset($_GET['id'])) {
+    $type = $_GET['delete_type'];
+    $id = (int)$_GET['id'];
+    
+    if ($type === 'event') {
+        $stmt = $conn->prepare("DELETE FROM events WHERE id = ?");
+        $stmt->execute([$id]);
+    } elseif ($type === 'movie') {
+        $stmt = $conn->prepare("DELETE FROM movies WHERE id = ?");
+        $stmt->execute([$id]);
+    }
+    header("Location: events.php");
+    exit;
+}
+
+>>>>>>> Stashed changes
 $movies = fetch_movies(null, false);
 $events = fetch_events(null, false);
 $message = $_GET['message'] ?? '';
@@ -55,9 +74,15 @@ $movieSchedules = fetch_movie_schedules_grouped_by_movie($movieIds);
 </head>
 <body>
 <div class="sidebar" id="sidebar">
+<<<<<<< Updated upstream
     <div class="logo">TicketVerse</div>
     <a href="index1.php">Dashboard</a>
     <a href="events.php">Manage Events</a>
+=======
+<div class="logo">🎟 TicketVerse</div>
+<a href="index.php">Dashboard</a>
+<a href="events.php" class="active">Manage Events</a>
+>>>>>>> Stashed changes
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
@@ -72,6 +97,7 @@ $movieSchedules = fetch_movie_schedules_grouped_by_movie($movieIds);
     </div>
 
     <div class="page-content">
+<<<<<<< Updated upstream
         <div class="admin-actions fixed-bottom-left">
             <a class="action-btn add-event-btn" href="add-event.php">Add Event</a>
             <a class="action-btn add-movie-btn" href="add-movie.php">Add Movie</a>
@@ -88,6 +114,24 @@ $movieSchedules = fetch_movie_schedules_grouped_by_movie($movieIds);
         <?php elseif ($message === 'show-removed'): ?>
             <div class="notice success-notice">Show slot removed successfully.</div>
         <?php endif; ?>
+=======
+<div class="admin-actions fixed-bottom-left">
+    <a class="action-btn add-event-btn" href="add-event.php">Add Event</a>
+    <a class="action-btn add-movie-btn" href="add-movie.php">Add Movie</a>
+</div>
+
+<?php if ($message === 'movie-added'): ?>
+    <div class="notice success-notice">Movie added successfully.</div>
+<?php elseif ($message === 'event-added'): ?>
+    <div class="notice success-notice">Event added successfully.</div>
+<?php elseif ($message === 'status-updated'): ?>
+    <div class="notice success-notice">Status updated successfully.</div>
+<?php elseif ($message === 'show-added'): ?>
+    <div class="notice success-notice">Show slot added successfully.</div>
+<?php elseif ($message === 'show-removed'): ?>
+    <div class="notice success-notice">Show slot removed successfully.</div>
+<?php endif; ?>
+>>>>>>> Stashed changes
 
         <h3>All Movies</h3>
         <div class="table-wrap">

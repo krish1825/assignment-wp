@@ -1,11 +1,25 @@
 <?php
 session_start();
+<<<<<<< Updated upstream
 
 if (isset($_SESSION['role'])) {
+=======
+if (isset($_SESSION['admin_id'])) {
+    header('Location: index1.php');
+    exit;
+} else if (isset($_SESSION['role'])) {
+
+    if ($_SESSION['role'] === 'guest') {
+        header('Location: ../guest%20user/home.php');
+        exit;
+    }
+
+>>>>>>> Stashed changes
     if ($_SESSION['role'] === 'normal') {
         header('Location: ../Normal%20user/home.php');
         exit;
     }
+<<<<<<< Updated upstream
 
     if ($_SESSION['role'] === 'admin') {
         header('Location: ../Admin%20dasbord/index1.php');
@@ -15,6 +29,43 @@ if (isset($_SESSION['role'])) {
 $error = $_GET['error'] ?? '';
 $success = $_GET['success'] ?? '';
 $user = $_GET['user'] ?? '';
+=======
+}
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: Sign_in.php");
+    exit;
+}
+
+require_once 'db.php';
+
+$error = $_GET['error'] ?? '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['admin_email'] ?? '');
+    $password = $_POST['admin_password'] ?? '';
+
+    if (empty($email) || empty($password)) {
+        $error = "Email and password are required.";
+    } else {
+        $stmt = $conn->prepare("SELECT id, full_name, password FROM admins WHERE email = ?");
+        $stmt->execute([$email]);
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($admin && password_verify($password, $admin['password'])) {
+            $_SESSION['admin_id'] = $admin['id'];
+            $_SESSION['admin_name'] = $admin['full_name'];
+            $_SESSION['role'] = 'admin'; // Compatibility with index1.php unified session check!
+            header("Location: index1.php");
+            exit;
+        } else {
+            $error = "Invalid email or password.";
+        }
+    }
+}
+$error = $_GET['error'] ?? '';
+>>>>>>> Stashed changes
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,6 +76,7 @@ $user = $_GET['user'] ?? '';
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="signin.css">
 </head>
+<<<<<<< Updated upstream
 <body>
 <header class="navbar">
     <div class="logo">Ticketvarse</div>
@@ -53,6 +105,65 @@ $user = $_GET['user'] ?? '';
                 <div class="options">
                     <label><input type="checkbox" name="remember_me"> Remember me</label>
                     <a href="../forgot_password.php">Forgot Password?</a>
+=======
+<body style="background: linear-gradient(165deg, var(--bg-top), var(--bg-bottom));">
+
+<div class="sidebar" id="sidebar">
+    <div class="logo">🎟 TicketVerse</div>
+    <a href="index.php">Dashboard</a>
+    <a href="events.php">Manage Events</a>
+    <a href="bookings.php">Bookings</a>
+    <a href="users.php">Users</a>
+    <a href="profile.php">Profile</a>
+    <a href="Sign_in.php?logout=true" class="active">Logout</a>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+        <h3>Logout / Sign In</h3>
+        <a class="profile-btn" href="profile.php">Admin Profile</a>
+    </div>
+
+    <div class="page-content" style="display: flex; justify-content: center; padding-top: 50px;">
+        <div class="login-container" style="width: 100%; max-width: 450px;">
+            <div class="login-box card" style="padding: 30px; border-radius: 14px; text-align: center;">
+                <h2 class="section-title">Sign In</h2>
+                <p style="color: var(--muted); margin-bottom: 24px;">Welcome back! Please login to your account</p>
+
+                <?php if ($error): ?>
+                    <div style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <form id="adminSignInForm" action="Sign_in.php" method="post" novalidate>
+                    <div class="form-group" style="text-align: left;">
+                        <input type="email" id="admin_email" name="admin_email" placeholder="Email Address" style="width: 100%; border: 1px solid #bfd8ff; border-radius: 8px; padding: 10px 12px; margin-bottom: 4px; background: var(--surface-soft);" required>
+                        <small class="error-message" style="margin-bottom: 12px;"></small>
+                    </div>
+                    
+                    <div class="form-group" style="text-align: left;">
+                        <input type="password" id="admin_password" name="admin_password" placeholder="Password" style="width: 100%; border: 1px solid #bfd8ff; border-radius: 8px; padding: 10px 12px; margin-bottom: 4px; background: var(--surface-soft);" required>
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="options" style="display: flex; justify-content: space-between; margin: 16px 0; font-size: 14px; color: var(--muted);">
+                        <label>
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <a href="#" style="color: var(--accent-strong); text-decoration: none;">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="submit-btn" style="width: 100%; margin-top: 10px;">Sign In</button>
+                </form>
+
+                <div class="divider" style="margin: 24px 0; color: #cbd5e1; font-weight: 600; font-size: 14px;">OR</div>
+
+                <div class="social-login" style="display: flex; flex-direction: column; gap: 12px;">
+                    <button class="google action-btn" style="background: white; color: var(--text); border: 1px solid var(--line); box-shadow: none;">Sign in with Google</button>
+                    <button class="facebook action-btn" style="background: #1877f2; color: white;">Sign in with Facebook</button>
+>>>>>>> Stashed changes
                 </div>
                 <button type="submit">Sign In</button>
             </form>

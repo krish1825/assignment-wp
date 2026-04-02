@@ -1,11 +1,16 @@
 <?php
 
+<<<<<<< Updated upstream
 declare(strict_types=1);
 
 require_once 'session_check.php';
 require_once __DIR__ . '/../includes/content_repository.php';
 
 $loginUserId = trim((string) ($_SESSION['user_id'] ?? ''));
+=======
+$admin_id = $_SESSION['admin_id'] ?? null;
+$user_id = $_SESSION['user_id'] ?? null;
+>>>>>>> Stashed changes
 $success = '';
 $error = '';
 
@@ -23,14 +28,22 @@ if (!$admin || (($admin['role'] ?? '') !== 'admin')) {
 $adminId = (int) $admin['id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+<<<<<<< Updated upstream
     $name = trim((string) ($_POST['admin_name'] ?? ''));
     $email = trim((string) ($_POST['admin_email'] ?? ''));
     $phone = trim((string) ($_POST['admin_phone'] ?? ''));
     $bio = trim((string) ($_POST['admin_bio'] ?? ''));
+=======
+    $name = trim($_POST['admin_name']);
+    $email = trim($_POST['admin_email']);
+    $phone = trim($_POST['admin_phone']);
+    $bio = trim($_POST['admin_bio'] ?? '');
+>>>>>>> Stashed changes
     
     if ($name === '' || $email === '' || $phone === '') {
         $error = 'Name, email, and phone are required.';
     } else {
+<<<<<<< Updated upstream
         try {
             update_user_profile($adminId, [
                 'full_name' => $name,
@@ -46,10 +59,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $admin = find_user_by_numeric_id($adminId) ?? $admin;
         } catch (Throwable $exception) {
             $error = 'Failed to update profile.';
+=======
+        if ($admin_id) {
+            $stmt = $conn->prepare("UPDATE admins SET full_name = ?, email = ?, phone = ?, bio = ? WHERE id = ?");
+            if ($stmt->execute([$name, $email, $phone, $bio, $admin_id])) {
+                $success = "Profile updated successfully!";
+                $_SESSION['admin_name'] = $name;
+            } else {
+                $error = "Failed to update profile.";
+            }
+        } else if ($user_id) {
+            require_once '../config/database.php';
+            $main_db = ticketvarse_db();
+            $stmt = $main_db->prepare("UPDATE users SET full_name = ?, email = ?, phone = ?, bio = ? WHERE user_id = ?");
+            if ($stmt->execute([$name, $email, $phone, $bio, $user_id])) {
+                $success = "Profile updated successfully!";
+            } else {
+                $error = "Failed to update profile.";
+            }
+>>>>>>> Stashed changes
         }
     }
 }
 
+<<<<<<< Updated upstream
+=======
+$admin = false;
+if ($admin_id) {
+    $stmt = $conn->prepare("SELECT * FROM admins WHERE id = ?");
+    $stmt->execute([$admin_id]);
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+} else if ($user_id) {
+    require_once '../config/database.php';
+    $main_db = ticketvarse_db();
+    $stmt = $main_db->prepare("SELECT *, full_name, email, phone, bio FROM users WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+if (!$admin) {
+    $admin = ['full_name' => 'Admin User', 'email' => '', 'phone' => '', 'bio' => ''];
+}
+
+>>>>>>> Stashed changes
 ?>
 <!DOCTYPE html>
 <html>

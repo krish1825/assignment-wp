@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?php
 
 declare(strict_types=1);
@@ -15,6 +16,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $users = fetch_users();
 $message = $_GET['message'] ?? '';
+=======
+
+<?php require_once 'session_check.php'; 
+
+if (isset($_GET['delete_id'])) {
+    $id = (int)$_GET['delete_id'];
+    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+    $stmt->execute([$id]);
+    header("Location: users.php");
+    exit;
+}
+
+$stmt = $conn->query("SELECT * FROM users ORDER BY created_at DESC");
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+>>>>>>> Stashed changes
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,9 +60,36 @@ $message = $_GET['message'] ?? '';
     </div>
 
     <div class="page-content">
+<<<<<<< Updated upstream
         <?php if ($message === 'status-updated'): ?>
             <div class="notice success-notice">User status updated successfully.</div>
         <?php endif; ?>
+=======
+
+    
+<div class="card" style="padding: 0;">
+    <h3 style="padding: 22px 22px 10px 22px;">All Users</h3>
+    <table style="border: none; border-radius: 0; box-shadow: none;">
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr>
+    <?php if (empty($users)): ?>
+    <tr><td colspan="5" style="text-align: center;">No users found.</td></tr>
+    <?php else: ?>
+        <?php foreach ($users as $user): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($user['id']); ?></td>
+            <td><?php echo htmlspecialchars($user['full_name']); ?></td>
+            <td><?php echo htmlspecialchars($user['email']); ?></td>
+            <td><span class="badge badge-<?php echo $user['status'] === 'Active' ? 'success' : 'warning'; ?>"><?php echo htmlspecialchars($user['status']); ?></span></td>
+            <td class="actions-cell">
+                <a href="#" class="btn-icon btn-edit" title="Edit">✎</a>
+                <a href="users.php?delete_id=<?php echo $user['id']; ?>" class="btn-icon btn-delete" title="Delete" onclick="return confirm('Delete this user?');">🗑</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </table>
+</div>
+>>>>>>> Stashed changes
 
         <h3>All Users</h3>
         <div class="table-wrap">

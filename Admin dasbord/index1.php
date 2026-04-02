@@ -2,11 +2,15 @@
 session_start();
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: Sign_in.php?error=Please%20sign%20in%20as%20admin');
+    header('Location: ../login.php?error=Please%20sign%20in%20as%20admin');
     exit;
 }
 
+<<<<<<< Updated upstream
 require_once 'db.php'; 
+=======
+require_once 'db.php';
+>>>>>>> Stashed changes
 
 // Fetch total events (events + movies)
 $event_count_stmt = $conn->query("SELECT COUNT(*) FROM events");
