@@ -32,7 +32,7 @@ $message = $_GET['message'] ?? '';
     <a href="bookings.php">Bookings</a>
     <a href="users.php" class="active">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="Sign_in.php?logout=true">Logout</a>
+    <a href="logout.php">Logout</a>
 </div>
 
 <div class="main">

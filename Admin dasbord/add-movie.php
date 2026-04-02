@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 
 declare(strict_types=1);
@@ -23,34 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'image_path' => $imagePath,
         'schedules' => is_array($schedulePayload) ? $schedulePayload : [],
     ]);
-
     header('Location: events.php?message=movie-added');
-=======
-<?php require_once 'session_check.php'; 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
-    $title = $_POST['movie_title'];
-    $genre = $_POST['movie_genre'];
-    $date = $_POST['movie_date'];
-    $duration = $_POST['movie_duration'];
-    $language = $_POST['movie_language'];
-    $description = $_POST['movie_description'];
-    $price = $_POST['movie_price'];
-    $shows = $_POST['movie_shows'];
-    
-    $photo = '';
-    if (isset($_FILES['movie_photo']) && $_FILES['movie_photo']['error'] == 0) {
-        $upload_dir = 'uploads/';
-        if (!is_dir($upload_dir)) mkdir($upload_dir);
-        $photo = time() . '_' . basename($_FILES['movie_photo']['name']);
-        move_uploaded_file($_FILES['movie_photo']['tmp_name'], $upload_dir . $photo);
-    }
-
-    $stmt = $conn->prepare("INSERT INTO movies (title, genre, release_date, duration, language, description, photo, price, shows_per_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$title, $genre, $date, $duration, $language, $description, $photo, $price, $shows]);
-    
-    header("Location: events.php");
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
     exit;
 }
 ?>
@@ -65,12 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
 <body class="movie-page-bg">
 <div class="sidebar" id="sidebar">
     <div class="logo">TicketVerse</div>
-    <a href="index.php">Dashboard</a>
+    <a href="index1.php">Dashboard</a>
     <a href="events.php" class="active">Manage Events</a>
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="Sign_in.php?logout=true">Logout</a>
+    <a href="logout.php">Logout</a>
 </div>
 
 <div class="main">
@@ -82,11 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
 
     <div class="page-content movie-form-card">
         <h2 class="section-title">Add New Movie</h2>
-<<<<<<< HEAD
-        <form class="form-card movie-form" method="post" enctype="multipart/form-data">
-=======
         <form class="form-card movie-form" id="movieForm" action="add-movie.php" method="post" enctype="multipart/form-data" novalidate>
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
             <div class="form-grid">
                 <div class="form-group">
                     <label for="movie_title">Movie Title</label>
@@ -210,7 +178,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
     </div>
 </div>
 
-<<<<<<< HEAD
 <script>
 (function () {
     var scheduleCatalog = <?= json_encode($scheduleCatalog, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
@@ -458,161 +425,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['movie_title'])) {
     renderSchedules();
 })();
 </script>
-=======
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="script.js"></script>
-<script>
-    $(function () {
-        var $form = $("#movieForm");
-
-        function setError($field, message) {
-            $field.addClass("has-error");
-            $field.closest(".form-group").find(".error-message").text(message);
-        }
-
-        function clearError($field) {
-            $field.removeClass("has-error");
-            $field.closest(".form-group").find(".error-message").text("");
-        }
-
-        function validateTitle() {
-            var $field = $("#movie_title");
-            var value = $.trim($field.val());
-            if (value.length < 2) {
-                setError($field, "Movie title must be at least 2 characters.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateGenre() {
-            var $field = $("#movie_genre");
-            if ($.trim($field.val()) === "") {
-                setError($field, "Please select a genre.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateDate() {
-            var $field = $("#movie_date");
-            if ($.trim($field.val()) === "") {
-                setError($field, "Please select a release date.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateDuration() {
-            var $field = $("#movie_duration");
-            var value = $.trim($field.val());
-            if (value === "" || isNaN(value) || Number(value) < 1) {
-                setError($field, "Duration must be at least 1 minute.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateLanguage() {
-            var $field = $("#movie_language");
-            var value = $.trim($field.val());
-            if (value.length < 2) {
-                setError($field, "Language is required.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateDescription() {
-            var $field = $("#movie_description");
-            var value = $.trim($field.val());
-            if (value === "") {
-                setError($field, "Description is required.");
-                return false;
-            }
-            if (value.length < 10) {
-                setError($field, "Description must be at least 10 characters.");
-                return false;
-            }
-            if (value.length > 500) {
-                setError($field, "Description must be less than 500 characters.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validatePhoto() {
-            var $field = $("#movie_photo");
-            var file = $field[0].files[0];
-            if (!file) {
-                setError($field, "Photo is required.");
-                return false;
-            }
-            if (file && file.type.indexOf("image/") !== 0) {
-                setError($field, "Please upload a valid image file.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validatePrice() {
-            var $field = $("#movie_price");
-            var value = $.trim($field.val());
-            if (value === "" || isNaN(value) || Number(value) < 0) {
-                setError($field, "Price must be 0 or greater.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateShows() {
-            var $field = $("#movie_shows");
-            var value = $.trim($field.val());
-            if (value === "" || isNaN(value) || Number(value) < 1) {
-                setError($field, "Shows per day must be at least 1.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        $("#movie_title").on("input blur", validateTitle);
-        $("#movie_genre").on("change blur", validateGenre);
-        $("#movie_date").on("change blur", validateDate);
-        $("#movie_duration").on("input blur", validateDuration);
-        $("#movie_language").on("input blur", validateLanguage);
-        $("#movie_description").on("input blur", validateDescription);
-        $("#movie_photo").on("change blur", validatePhoto);
-        $("#movie_price").on("input blur", validatePrice);
-        $("#movie_shows").on("input blur", validateShows);
-
-        $form.on("submit", function (event) {
-            var isValid = [
-                validateTitle(),
-                validateGenre(),
-                validateDate(),
-                validateDuration(),
-                validateLanguage(),
-                validateDescription(),
-                validatePhoto(),
-                validatePrice(),
-                validateShows()
-            ].every(Boolean);
-
-            if (!isValid) {
-                event.preventDefault();
-            }
-        });
-    });
-</script>
 </body>
 </html>

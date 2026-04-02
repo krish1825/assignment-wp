@@ -61,7 +61,7 @@ $movieSchedules = fetch_movie_schedules_grouped_by_movie($movieIds);
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="Sign_in.php?logout=true">Logout</a>
+    <a href="logout.php">Logout</a>
 </div>
 
 <div class="main">
@@ -375,6 +375,9 @@ $movieSchedules = fetch_movie_schedules_grouped_by_movie($movieIds);
     });
 })();
 </script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

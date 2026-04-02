@@ -3,7 +3,7 @@ session_start();
 
 require_once __DIR__ . '/../includes/content_repository.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'normal') {
+if (!isset($_SESSION['role']) || $_SESSION['role']  all !== 'normal') {
     header('Location: Sign_in.php?error=Please%20sign%20in%20as%20normal%20user');
     exit;
 }
@@ -129,6 +129,9 @@ $trendingItems = fetch_home_trending();
     </div>
     <div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div>
 </footer>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="search.js"></script>
 </body>
 </html>

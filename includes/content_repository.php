@@ -516,6 +516,46 @@ function create_registered_user(array $payload): int
     return (int) $pdo->lastInsertId();
 }
 
+function generate_unique_login_id(string $prefix = 'user'): string
+{
+    $prefix = strtolower(trim($prefix)) ?: 'user';
+    $prefix = preg_replace('/[^a-z0-9]/', '', $prefix) ?: 'user';
+
+    $counter = 1;
+    do {
+        $candidate = $prefix . str_pad((string) $counter, 3, '0', STR_PAD_LEFT);
+        $exists = find_user_for_login($candidate);
+        if ($exists === null) {
+            return $candidate;
+        }
+        $counter++;
+    } while ($counter < 100000);
+
+    return $prefix . bin2hex(random_bytes(3));
+}
+
+function create_admin_user(array $payload): int
+{
+    $pdo = db();
+    $statement = $pdo->prepare(
+        'INSERT INTO users
+            (user_id, full_name, email, password, role, status, phone, bio)
+         VALUES
+            (:user_id, :full_name, :email, :password, :role, :status, :phone, :bio)'
+    );
+    $statement->execute([
+        'user_id' => trim((string) $payload['user_id']),
+        'full_name' => trim((string) $payload['full_name']),
+        'email' => trim((string) $payload['email']),
+        'password' => (string) $payload['password'],
+        'role' => 'admin',
+        'status' => 'active',
+        'phone' => trim((string) ($payload['phone'] ?? '')) ?: null,
+        'bio' => trim((string) ($payload['bio'] ?? '')) ?: null,
+    ]);
+    return (int) $pdo->lastInsertId();
+}
+
 function is_user_email_verified(array $user): bool
 {
     return trim((string) ($user['email_verified_at'] ?? '')) !== '';

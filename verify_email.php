@@ -18,7 +18,14 @@ if ($user === null) {
     exit;
 }
 
+$signinPath = 'guest%20user/Sign_in.php';
+if (($user['role'] ?? '') === 'admin') {
+    $signinPath = 'Admin%20dasbord/Sign_in.php';
+} elseif (($user['role'] ?? '') === 'normal') {
+    $signinPath = 'Normal%20user/Sign_in.php';
+}
+
 mark_user_email_verified((int) $user['id']);
 
-header('Location: guest%20user/Sign_in.php?success=' . rawurlencode('Email verified successfully. You can sign in now.') . '&user=' . rawurlencode((string) $user['user_id']));
+header('Location: ' . $signinPath . '?success=' . rawurlencode('Email verified successfully. You can sign in now.') . '&user=' . rawurlencode((string) $user['user_id']));
 exit;

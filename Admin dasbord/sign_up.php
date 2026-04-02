@@ -1,34 +1,57 @@
 <?php
-require_once 'db.php';
+declare(strict_types=1);
+
+require_once __DIR__ . '/../includes/content_repository.php';
 session_start();
 
 $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['admin_name']);
-    $email = trim($_POST['admin_email']);
-    $phone = trim($_POST['admin_phone']);
-    $password = $_POST['admin_password'];
-    $confirm = $_POST['admin_password_confirm'];
+    $name = trim((string) ($_POST['admin_name'] ?? ''));
+    $email = trim((string) ($_POST['admin_email'] ?? ''));
+    $phone = trim((string) ($_POST['admin_phone'] ?? ''));
+    $password = (string) ($_POST['admin_password'] ?? '');
+    $confirm = (string) ($_POST['admin_password_confirm'] ?? '');
 
     if (empty($name) || empty($email) || empty($phone) || empty($password) || empty($confirm)) {
         $error = "All fields are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Enter a valid email address.";
+    } elseif (!preg_match('/^\d{10,15}$/', preg_replace('/\D/', '', $phone))) {
+        $error = "Phone number must be 10 to 15 digits.";
+    } elseif (strlen($password) < 8) {
+        $error = "Password must be at least 8 characters.";
     } elseif ($password !== $confirm) {
         $error = "Passwords do not match.";
     } else {
-        // Check if email already exists
-        $stmt = $conn->prepare("SELECT id FROM admins WHERE email = ?");
-        $stmt->execute([$email]);
-        if ($stmt->rowCount() > 0) {
+        if (find_user_by_email($email) !== null) {
             $error = "Email is already registered.";
         } else {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("INSERT INTO admins (full_name, email, phone, password) VALUES (?, ?, ?, ?)");
-            if ($stmt->execute([$name, $email, $phone, $hashed_password])) {
-                $success = "Registration successful! You can now sign in.";
-            } else {
-                $error = "Something went wrong. Please try again.";
+            try {
+                $loginId = generate_unique_login_id('admin');
+                $newUserId = create_admin_user([
+                    'user_id' => $loginId,
+                    'full_name' => $name,
+                    'email' => $email,
+                    'password' => $password,
+                    'phone' => $phone,
+                ]);
+
+                $user = find_user_by_numeric_id($newUserId);
+                if ($user === null) {
+                    throw new RuntimeException('Admin account could not be loaded after registration.');
+                }
+
+                send_verification_for_user($user);
+
+                $successMessage = 'Registration completed. Please verify your email before signing in. Your admin user ID is '
+                    . $loginId
+                    . '. A verification link was saved to storage/mail/verification.log for local testing.';
+                header('Location: Sign_in.php?success=' . rawurlencode($successMessage) . '&user=' . rawurlencode($loginId));
+                exit;
+            } catch (Throwable $exception) {
+                $error = 'Registration failed. ' . $exception->getMessage();
             }
         }
     }
@@ -38,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up | TicketVerse</title>
+    <title>Admin Sign Up | TicketVerse</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="signin.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,12 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="sidebar" id="sidebar">
     <div class="logo">🎟 TicketVerse</div>
-    <a href="index.php">Dashboard</a>
+    <a href="index1.php">Dashboard</a>
     <a href="events.php">Manage Events</a>
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="sign_in.php" class="active">Login</a>
+    <a href="Sign_in.php" class="active">Login</a>
 </div>
 
 <div class="main">
@@ -80,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 <?php endif; ?>
 
-                <form action="sign_up.php" method="post" novalidate>
+                <form id="adminSignupForm" action="sign_up.php" method="post" novalidate>
                     <div class="form-group" style="text-align: left;">
                         <input type="text" name="admin_name" placeholder="Full Name" required style="width: 100%; border: 1px solid #bfd8ff; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; background: var(--surface-soft);">
                     </div>
@@ -105,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
 
                 <p class="signup-link" style="margin-top: 24px; color: var(--muted); font-size: 14px;">
-                    Already have an account? <a href="sign_in.php" style="color: var(--accent-strong); text-decoration: none; font-weight: 600;">Sign In</a>
+                    Already have an account? <a href="Sign_in.php" style="color: var(--accent-strong); text-decoration: none; font-weight: 600;">Sign In</a>
                 </p>
             </div>
         </div>
@@ -113,6 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

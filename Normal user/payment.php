@@ -151,6 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </section>
 </main>
 <footer class="site-footer"><div class="footer-grid"><div class="footer-col"><h4>Ticketvarse</h4><p>Book movie and event tickets with easy checkout and best prices.</p></div><div class="footer-col"><h4>Quick Links</h4><a href="home.php">Home</a><a href="movies.php">Movies</a><a href="events.php">Events</a><a href="Offers.php">Offers</a></div><div class="footer-col"><h4>Support</h4><a href="profile.php">Profile</a><a href="My_Bookings.php">My Bookings</a><a href="sign_up.php">Sign Up</a></div><div class="footer-col"><h4>Contact</h4><p>Email: support@ticketvarse.com</p><p>Phone: +91 90000 00000</p></div></div><div class="footer-note">&copy; 2026 Ticketvarse. All Rights Reserved.</div></footer>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="payment.js"></script>
 </body>
 </html>

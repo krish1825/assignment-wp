@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 
 declare(strict_types=1);
@@ -19,34 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'available_seats' => $_POST['event_seats'] ?? 0,
         'image_path' => $imagePath,
     ]);
-
     header('Location: events.php?message=event-added');
-=======
-<?php require_once 'session_check.php'; 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_name'])) {
-    $name = $_POST['event_name'];
-    $category = $_POST['event_category'];
-    $date = $_POST['event_date'];
-    $time = $_POST['event_time'];
-    $location = $_POST['event_location'];
-    $description = $_POST['event_description'];
-    $price = $_POST['event_price'];
-    $seats = $_POST['event_seats'];
-    
-    $photo = '';
-    if (isset($_FILES['event_photo']) && $_FILES['event_photo']['error'] == 0) {
-        $upload_dir = 'uploads/';
-        if (!is_dir($upload_dir)) mkdir($upload_dir);
-        $photo = time() . '_' . basename($_FILES['event_photo']['name']);
-        move_uploaded_file($_FILES['event_photo']['tmp_name'], $upload_dir . $photo);
-    }
-
-    $stmt = $conn->prepare("INSERT INTO events (event_name, category, event_date, event_time, location, description, photo, price, seats) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$name, $category, $date, $time, $location, $description, $photo, $price, $seats]);
-    
-    header("Location: events.php");
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
     exit;
 }
 ?>
@@ -61,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_name'])) {
 <body class="event-page-bg">
 <div class="sidebar" id="sidebar">
     <div class="logo">TicketVerse</div>
-    <a href="index.php">Dashboard</a>
+    <a href="index1.php">Dashboard</a>
     <a href="events.php" class="active">Manage Events</a>
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="Sign_in.php?logout=true">Logout</a>
+    <a href="logout.php">Logout</a>
 </div>
 
 <div class="main">
@@ -78,11 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_name'])) {
 
     <div class="page-content event-form-card">
         <h2 class="section-title">Create New Event</h2>
-<<<<<<< HEAD
-        <form class="form-card event-form" method="post" enctype="multipart/form-data">
-=======
         <form class="form-card event-form" id="eventForm" action="add-event.php" method="post" enctype="multipart/form-data" novalidate>
->>>>>>> 38d872e849e51c68b1bbb737b8fc11198aaccacf
             <div class="form-grid">
                 <div class="form-group">
                     <label for="event_name">Event Name</label>
@@ -145,161 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_name'])) {
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="script.js"></script>
-<script>
-    $(function () {
-        var $form = $("#eventForm");
-
-        function setError($field, message) {
-            $field.addClass("has-error");
-            $field.closest(".form-group").find(".error-message").text(message).css({
-                color: "#ff0000",
-                fontWeight: "600"
-            });
-        }
-
-        function clearError($field) {
-            $field.removeClass("has-error");
-            $field.closest(".form-group").find(".error-message").text("");
-        }
-
-        function validateName() {
-            var $field = $("#event_name");
-            var value = $.trim($field.val());
-            if (value.length < 3) {
-                setError($field, "Event name must be at least 3 characters.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateCategory() {
-            var $field = $("#event_category");
-            if ($.trim($field.val()) === "") {
-                setError($field, "Please select a category.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateDate() {
-            var $field = $("#event_date");
-            var value = $.trim($field.val());
-            if (value === "") {
-                setError($field, "Please select an event date.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateTime() {
-            var $field = $("#event_time");
-            if ($.trim($field.val()) === "") {
-                setError($field, "Please select an event time.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateLocation() {
-            var $field = $("#event_location");
-            var value = $.trim($field.val());
-            if (value.length < 3) {
-                setError($field, "Location must be at least 3 characters.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateDescription() {
-            var $field = $("#event_description");
-            var value = $.trim($field.val());
-            if (value === "") {
-                setError($field, "Description is required.");
-                return false;
-            }
-            if (value.length < 10) {
-                setError($field, "Description must be at least 10 characters.");
-                return false;
-            }
-            if (value.length > 500) {
-                setError($field, "Description must be less than 500 characters.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validatePhoto() {
-            var $field = $("#event_photo");
-            var file = $field[0].files[0];
-            if (!file) {
-                setError($field, "Photo is required.");
-                return false;
-            }
-            if (file && file.type.indexOf("image/") !== 0) {
-                setError($field, "Please upload a valid image file.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validatePrice() {
-            var $field = $("#event_price");
-            var value = $.trim($field.val());
-            if (value === "" || isNaN(value) || Number(value) < 0) {
-                setError($field, "Price must be 0 or greater.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        function validateSeats() {
-            var $field = $("#event_seats");
-            var value = $.trim($field.val());
-            if (value === "" || isNaN(value) || Number(value) < 1) {
-                setError($field, "Seats must be at least 1.");
-                return false;
-            }
-            clearError($field);
-            return true;
-        }
-
-        $("#event_name").on("input blur", validateName);
-        $("#event_category").on("change blur", validateCategory);
-        $("#event_date").on("change blur", validateDate);
-        $("#event_time").on("change blur", validateTime);
-        $("#event_location").on("input blur", validateLocation);
-        $("#event_description").on("input blur", validateDescription);
-        $("#event_photo").on("change blur", validatePhoto);
-        $("#event_price").on("input blur", validatePrice);
-        $("#event_seats").on("input blur", validateSeats);
-
-        $form.on("submit", function (event) {
-            var isValid = [
-                validateName(),
-                validateCategory(),
-                validateDate(),
-                validateTime(),
-                validateLocation(),
-                validateDescription(),
-                validatePhoto(),
-                validatePrice(),
-                validateSeats()
-            ].every(Boolean);
-
-            if (!isValid) {
-                event.preventDefault();
-            }
-        });
-    });
-</script>
 </body>
 </html>

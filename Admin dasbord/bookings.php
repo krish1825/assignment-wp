@@ -21,7 +21,7 @@ $bookings = fetch_all_bookings();
     <a href="bookings.php" class="active">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="Sign_in.php?logout=true">Logout</a>
+    <a href="logout.php">Logout</a>
 </div>
 <div class="main">
     <div class="topbar">

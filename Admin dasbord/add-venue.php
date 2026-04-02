@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="bookings.php">Bookings</a>
     <a href="users.php">Users</a>
     <a href="profile.php">Profile</a>
-    <a href="sign_in.php">Logout</a>
+    <a href="logout.php">Logout</a>
 </div>
 
 <div class="main">
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="page-content venue-form-card">
         <h2 class="section-title">Create New Venue</h2>
-        <form class="form-card venue-form" method="post">
+        <form class="form-card venue-form" id="venueForm" method="post" novalidate>
             <div class="form-grid">
                 <div class="form-group">
                     <label for="venue_city">City</label>
@@ -69,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+<script src="../assets/js/form-validation.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
